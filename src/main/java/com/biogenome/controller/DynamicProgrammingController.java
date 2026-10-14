@@ -180,6 +180,29 @@ public class DynamicProgrammingController {
         }
     }
 
+    // ===== 3.5 Alignment Comparison (Needleman-Wunsch vs Smith-Waterman vs Levenshtein) =====
+    @PostMapping("/compare")
+    public ResponseEntity<ApiResponse> compareAlignments(@RequestBody Map<String, Object> body) {
+        try {
+            String seq1 = sanitize((String) body.getOrDefault("sequence1",
+                    GenomicDataGenerator.HUMAN_HBB_WILDTYPE.substring(0, 30)));
+            String seq2 = sanitize((String) body.getOrDefault("sequence2",
+                    GenomicDataGenerator.HUMAN_HBB_SICKLE_CELL.substring(0, 30)));
+            int matchScore  = parseIntSafe(body.get("matchScore"),  2);
+            int mismatchPen = parseIntSafe(body.get("mismatchPenalty"), -1);
+            int gapPen      = parseIntSafe(body.get("gapPenalty"), -2);
+
+            long start = System.currentTimeMillis();
+            com.biogenome.dp.AlignmentComparator.DpComparisonResult res =
+                    com.biogenome.dp.AlignmentComparator.compareAlignments(seq1, seq2, matchScore, mismatchPen, gapPen);
+            long elapsed = System.currentTimeMillis() - start;
+
+            return ResponseEntity.ok(ApiResponse.ok("Alignment Algorithm Comparison", elapsed, res));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error("Alignment Comparison Failure", e.getMessage()));
+        }
+    }
+
     // ===== Helpers =====
     private String sanitize(String seq) {
         if (seq == null) return "";

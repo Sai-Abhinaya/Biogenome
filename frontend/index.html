@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BioGenome – Explore Biological Sequences Through Algorithms</title>
+  
+  <!-- Modern Scientific Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Botanical & Scientific Theme Stylesheets -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/simulations.css">
+</head>
+<body>
+
+  <!-- ============================================================== -->
+  <!-- A. Compact Navigation Bar                                      -->
+  <!-- ============================================================== -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="#" class="header-brand" data-target="tab-home">
+        <div class="brand-icon">🧬</div>
+        <div class="brand-info">
+          <span class="brand-name">BioGenome</span>
+          <span class="brand-tagline">Biological Sequence Algorithms Lab</span>
+        </div>
+      </a>
+
+      <nav class="header-nav">
+        <a href="#" class="nav-item active" data-target="tab-home">
+          <span>🏠</span> Home
+        </a>
+        <a href="#" class="nav-item" data-target="tab-explorer">
+          <span>🧭</span> Explore Algorithms
+        </a>
+        <a href="#" class="nav-item" data-target="tab-how-it-works">
+          <span>📖</span> How It Works
+        </a>
+        <a href="#" class="nav-item" data-target="tab-comparison">
+          <span>⚖️</span> Comparison Lab
+        </a>
+        <a href="#" class="nav-item" data-target="tab-about">
+          <span>ℹ️</span> About
+        </a>
+      </nav>
+
+      <div class="header-actions">
+        <button id="theme-toggle-btn" class="theme-toggle" title="Toggle warm light / scientific dark theme">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================================== -->
+  <!-- Main Content Application Shell                                 -->
+  <!-- ============================================================== -->
+  <main class="app-main">
+    <div class="container">
+
+      <!-- ========================================================== -->
+      <!-- 1. HOME TAB                                                -->
+      <!-- ========================================================== -->
+      <section id="tab-home" class="tab-section active">
+        
+        <!-- Hero Section -->
+        <div class="hero-section">
+          <div class="hero-pill">
+            <span>🌿</span> Modern Bioinformatics & Computational Algorithms
+          </div>
+          <h1 class="hero-title">Understand Biology Through Algorithms</h1>
+          <p class="hero-tagline">"Explore biological sequences through algorithms."</p>
+          <p class="hero-desc">
+            BioGenome demonstrates how computational data structures and algorithms solve essential biological problems—from locating regulatory motifs in DNA sequences to aligning homologous genes, indexing whole genomes, and optimizing laboratory operations.
+          </p>
+          <div class="hero-actions">
+            <button id="hero-explore-btn" class="btn btn-primary btn-lg">
+              <span>🧭</span> Explore Algorithms
+            </button>
+            <button id="hero-how-btn" class="btn btn-outline btn-lg">
+              <span>📖</span> Learn How It Works
+            </button>
+          </div>
+        </div>
+
+        <!-- Biological Use Cases Grid -->
+        <div class="section-header">
+          <div class="section-label">Biological Problem Collection</div>
+          <h2 class="section-title">What Biological Problem Do You Want to Solve?</h2>
+          <p class="section-subtitle">
+            Select a biological challenge to immediately explore its corresponding computational algorithm, understand why it works, and run real simulations on DNA sequences.
+          </p>
+        </div>
+
+        <!-- Dynamic Home Tasks Grid -->
+        <div id="home-tasks-grid" class="tasks-grid"></div>
+
+        <!-- Philosophy Banner -->
+        <div class="philosophy-banner">
+          <div class="philosophy-icon">🔬</div>
+          <div class="philosophy-text">
+            <h3>The Biological Scale Demands Computational Algorithms</h3>
+            <p>
+              A single human genome contains <strong>3.2 billion base pairs</strong>. Searching for a transcription factor binding site by brute force would require trillions of redundant character comparisons. Classical algorithms like Knuth–Morris–Pratt, Suffix Arrays, and Dynamic Programming transform computationally intractable biological questions into fast, linear or sub-linear solutions.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================== -->
+      <!-- 2. ALGORITHM EXPLORER TAB (The Primary Workspace)          -->
+      <!-- ========================================================== -->
+      <section id="tab-explorer" class="tab-section">
+        <div class="section-header">
+          <div class="section-label">Interactive Algorithm Explorer</div>
+          <h2 class="section-title">Explore Algorithms by Biological Problem</h2>
+          <p class="section-subtitle">
+            Follow the 5-step workflow to understand the biological problem, inspect the underlying DSA algorithm, provide biological sequences, and examine verified computational results.
+          </p>
+        </div>
+
+        <div class="explorer-layout">
+          
+          <!-- Category Chips Bar -->
+          <div id="explorer-category-chips" class="category-chips-bar"></div>
+
+          <!-- STEP 1: Select Biological Task -->
+          <div class="workflow-step-card">
+            <div class="step-indicator">Step 1 — Select Biological Task</div>
+            <div class="form-group">
+              <label class="form-label" for="explorer-algo-select">
+                <span>Select Biological Challenge & Corresponding Algorithm</span>
+                <span class="form-label-hint">Organized by genuine biological problem</span>
+              </label>
+              <select id="explorer-algo-select" class="form-select" style="font-weight: 600; font-size: 0.95rem;"></select>
+            </div>
+          </div>
+
+          <!-- STEP 2: View Corresponding DSA Algorithm & Explanation -->
+          <div class="algo-meta-panel">
+            <div class="algo-primary-info">
+              <div class="algo-badge-row">
+                <span id="algo-domain-badge" class="badge-biological">Domain</span>
+                <span id="algo-dsa-name" class="badge-dsa">Algorithm</span>
+              </div>
+              <h2 id="algo-display-title" class="algo-display-title">DNA Sequence Matching</h2>
+              <div class="algo-dsa-subtitle">Computational Engine: <strong id="algo-dsa-engine-name">Knuth–Morris–Pratt (KMP)</strong></div>
+
+              <div class="algo-purpose-box">
+                <strong>Biological Purpose:</strong> <span id="algo-purpose-text">Locates exact occurrences of a regulatory motif...</span>
+              </div>
+
+              <!-- Context & DSA Connection Grid -->
+              <div style="margin-bottom: 1rem;">
+                <h4 style="font-size: 0.78rem; text-transform: uppercase; color: var(--text-light); font-weight: 700; margin-bottom: 0.35rem;">Biological Context:</h4>
+                <p id="algo-context-text" style="font-size: 0.88rem; color: var(--text-body); line-height: 1.55; margin-bottom: 0.85rem;"></p>
+
+                <h4 style="font-size: 0.78rem; text-transform: uppercase; color: var(--text-light); font-weight: 700; margin-bottom: 0.35rem;">DSA Connection:</h4>
+                <p id="algo-dsa-connection-text" style="font-size: 0.88rem; color: var(--text-body); line-height: 1.55;"></p>
+              </div>
+
+              <div class="algo-io-grid">
+                <div class="io-item">
+                  <div class="io-label">Input Specification</div>
+                  <div id="algo-input-desc" class="io-content">Target DNA sequence & query motif</div>
+                </div>
+                <div class="io-item">
+                  <div class="io-label">Output Produced</div>
+                  <div id="algo-output-desc" class="io-content">0-based match indices & LPS table</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Complexity & Numbered Steps -->
+            <div class="algo-secondary-info">
+              <div class="complexity-card">
+                <div class="complexity-header">
+                  <span>Asymptotic Complexity</span>
+                  <span>⏱️ 💾</span>
+                </div>
+                <div class="complexity-row">
+                  <span class="complexity-name">Time Complexity:</span>
+                  <span id="algo-time-complexity" class="complexity-val">O(n + m)</span>
+                </div>
+                <div id="algo-time-explanation" class="complexity-note">Linear in sequence and motif lengths.</div>
+
+                <div class="complexity-row" style="margin-top: 0.65rem;">
+                  <span class="complexity-name">Space Complexity:</span>
+                  <span id="algo-space-complexity" class="complexity-val">O(m)</span>
+                </div>
+                <div id="algo-space-explanation" class="complexity-note">Proportional to query motif length.</div>
+              </div>
+
+              <div class="how-it-works-box">
+                <div class="how-it-works-title">How The Algorithm Works (Steps):</div>
+                <ol id="algo-steps-list" class="steps-list"></ol>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 3: Enter Biological Sequences & Parameters -->
+          <div class="adaptive-input-card">
+            <div class="step-indicator">Step 3 — Provide Biological Input Data</div>
+            
+            <div class="input-header-row">
+              <span style="font-size: 0.85rem; color: var(--text-muted);">
+                Provide biological sequence data or select a pre-configured educational dataset:
+              </span>
+              <div class="preset-selector-group">
+                <span class="preset-label">Preset:</span>
+                <select id="explorer-preset-select" class="form-select sm" style="max-width: 320px;"></select>
+              </div>
+            </div>
+
+            <!-- Adaptive Input Fields -->
+            <div id="adaptive-inputs-container"></div>
+            
+            <div id="explorer-validation-error" class="validation-error-text" style="margin-top: 0.75rem;"></div>
+
+            <!-- Action Buttons -->
+            <div class="form-row-actions">
+              <div style="font-size: 0.82rem; color: var(--text-light);">
+                Indices are reported in standard <strong>0-based indexing</strong>.
+              </div>
+              <div style="display: flex; gap: 0.65rem;">
+                <button id="explorer-run-btn" class="btn btn-primary">
+                  <span>⚡</span> Run Algorithm
+                </button>
+                <button id="explorer-sim-toggle-btn" class="btn btn-outline">
+                  <span>▶</span> Step-by-Step Simulation
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 4 & 5: Clean Result Presentation (Requirement #8) -->
+          <div id="explorer-results-card" class="results-card" style="display: none;">
+            <div class="step-indicator">Step 5 — Results & Algorithmic Trace</div>
+            
+            <div class="results-header">
+              <div class="results-title-group">
+                <span class="results-badge">Execution Result</span>
+                <h3 class="results-title">Calculated Output</h3>
+              </div>
+              <div id="results-metrics-strip" class="results-metrics-strip"></div>
+            </div>
+
+            <!-- Content Summary -->
+            <div id="results-summary-content" class="results-summary-box"></div>
+
+            <!-- Step-by-Step Interactive Player (Optional) -->
+            <div id="explorer-player-controls" class="player-controls-strip" style="display: none;">
+              <div class="controls-top-row">
+                <div class="btn-group">
+                  <button id="explorer-reset-btn" class="btn btn-subtle btn-sm" title="Reset to start">⏮ Reset</button>
+                  <button id="explorer-prev-btn" class="btn btn-subtle btn-sm" title="Previous step">◀ Prev</button>
+                  <button id="explorer-play-btn" class="btn btn-primary btn-sm" title="Play animation">▶ Play</button>
+                  <button id="explorer-next-btn" class="btn btn-subtle btn-sm" title="Next step">Next ▶</button>
+                  <button id="explorer-end-btn" class="btn btn-subtle btn-sm" title="Jump to end">⏭ End</button>
+                </div>
+
+                <div class="speed-control">
+                  <span>Playback Speed:</span>
+                  <select id="explorer-speed-select" class="form-select sm" style="width: auto;">
+                    <option value="slow">Slow</option>
+                    <option value="normal" selected>Normal</option>
+                    <option value="fast">Fast</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="progress-track">
+                <div id="explorer-progress-fill" class="progress-bar-fill"></div>
+              </div>
+
+              <div class="status-step-row">
+                <span id="explorer-step-counter" style="font-family: var(--font-mono); font-weight: 600;">Step 1 / 1</span>
+                <span id="explorer-operation-title" style="font-weight: 600; color: var(--forest-green);">Operation</span>
+              </div>
+
+              <div class="step-explanation-box">
+                <div id="explorer-step-explanation">Press "Play" or "Next" to step through the algorithm execution.</div>
+                <div id="explorer-math-formula" class="step-math-pill" style="display: none;"></div>
+              </div>
+            </div>
+
+            <!-- Visual Canvas Stage -->
+            <div class="visual-canvas-card">
+              <div class="visual-canvas-header">
+                <span class="visual-canvas-title">
+                  <span>🔍</span> Intermediate Algorithmic State Representation:
+                </span>
+              </div>
+              <div id="explorer-visual-stage"></div>
+            </div>
+
+            <!-- Expandable Technical Details -->
+            <details class="expandable-details">
+              <summary class="expandable-summary">
+                <span>View Mathematical & Computational Details</span>
+                <span>▾</span>
+              </summary>
+              <div class="expandable-content">
+                <p style="margin-bottom: 0.75rem;">
+                  <strong>Correctness & Invariants:</strong> The selected algorithm guarantees exact solution bounds by verifying mathematical state invariants across all steps.
+                </p>
+                <p style="margin-bottom: 0.75rem;">
+                  <strong>Zero-Based Indexing:</strong> In conformance with standard bioinformatics conventions and programmatic array indexing, all nucleotide positions and match indices reported in BioGenome use 0-based coordinates.
+                </p>
+                <p>
+                  <strong>Empirical Verification:</strong> Results are computed directly in real-time by the algorithmic simulation engine without artificial mock functions or hardcoded values.
+                </p>
+              </div>
+            </details>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ========================================================== -->
+      <!-- 3. HOW IT WORKS TAB (Educational Bridge)                   -->
+      <!-- ========================================================== -->
+      <section id="tab-how-it-works" class="tab-section">
+        <div class="section-header">
+          <div class="section-label">Educational Bridge</div>
+          <h2 class="section-title">How Data Structures & Algorithms Power Biology</h2>
+          <p class="section-subtitle">
+            Connecting genomic questions to computational formulations and classical algorithms.
+          </p>
+        </div>
+
+        <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 2rem; box-shadow: var(--shadow-xs); margin-bottom: 2rem;">
+          <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--forest-green); margin-bottom: 1rem;">
+            The Mental Bridge: From Wet Lab to Algorithmic Solution
+          </h3>
+          <p style="font-size: 0.95rem; line-height: 1.65; color: var(--text-body); margin-bottom: 1.25rem;">
+            In molecular biology, researchers frequently encounter massive sequence collections. Whether identifying disease-causing single nucleotide polymorphisms (SNPs), locating transcription factor binding motifs, or routing specimens through testing facilities, every biological question translates into a well-defined computational problem.
+          </p>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-top: 1.5rem;">
+            <div style="background: var(--bg-subtle); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+              <div style="font-weight: 700; color: var(--forest-green); margin-bottom: 0.35rem;">1. Biological Question</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+                "Where does RNA polymerase bind to initiate transcription in this bacterial chromosome?"
+              </p>
+            </div>
+            <div style="background: var(--bg-subtle); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+              <div style="font-weight: 700; color: var(--teal-accent); margin-bottom: 0.35rem;">2. Computational Formulation</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+                Exact String Matching: Find all start offsets of pattern P of length m inside text T of length n.
+              </p>
+            </div>
+            <div style="background: var(--bg-subtle); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+              <div style="font-weight: 700; color: var(--sage-accent); margin-bottom: 0.35rem;">3. DSA Algorithm</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+                Knuth–Morris–Pratt (KMP): Uses a prefix fallback table (π-array) to achieve guaranteed linear O(n + m) runtime.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Full Reference Table -->
+        <div class="section-header">
+          <h3 class="section-title" style="font-size: 1.2rem;">Complete Biological Task to DSA Mapping Reference</h3>
+        </div>
+
+        <div class="table-responsive" style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Biological Problem</th>
+                <th>Bioinformatics Task</th>
+                <th>DSA Algorithm</th>
+                <th>Time Complexity</th>
+                <th>Space Complexity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>DNA Sequence Matching</strong></td>
+                <td>Promoter motif discovery</td>
+                <td><code>Knuth–Morris–Pratt (KMP)</code></td>
+                <td><code>O(n + m)</code></td>
+                <td><code>O(m)</code></td>
+              </tr>
+              <tr>
+                <td><strong>Tandem Repeat Discovery</strong></td>
+                <td>Microsatellite detection</td>
+                <td><code>Z-Algorithm</code></td>
+                <td><code>O(n + m)</code></td>
+                <td><code>O(n + m)</code></td>
+              </tr>
+              <tr>
+                <td><strong>Fast Sliding Window Search</strong></td>
+                <td>CpG island filtering</td>
+                <td><code>Rabin–Karp Rolling Hash</code></td>
+                <td><code>O(n + m) avg</code></td>
+                <td><code>O(1)</code></td>
+              </tr>
+              <tr>
+                <td><strong>Multi-Motif Screening</strong></td>
+                <td>Simultaneous restriction sites</td>
+                <td><code>Aho–Corasick Automaton</code></td>
+                <td><code>O(n + ∑m + z)</code></td>
+                <td><code>O(∑m · |Σ|)</code></td>
+              </tr>
+              <tr>
+                <td><strong>Whole-Genome Indexing</strong></td>
+                <td>Sub-linear chromosome lookup</td>
+                <td><code>Suffix Array & Binary Search</code></td>
+                <td><code>O(m log n) search</code></td>
+                <td><code>O(n)</code></td>
+              </tr>
+              <tr>
+                <td><strong>Whole-Genome Suffix Construction</strong></td>
+                <td>Linear chromosome index build</td>
+                <td><code>SA-IS (Induced Sorting)</code></td>
+                <td><code>O(n) linear</code></td>
+                <td><code>O(n)</code></td>
+              </tr>
+              <tr>
+                <td><strong>Repeated Gene Discovery</strong></td>
+                <td>Segmental duplication detection</td>
+                <td><code>Kasai’s LCP Algorithm</code></td>
+                <td><code>O(n) linear</code></td>
+                <td><code>O(n)</code></td>
+              </tr>
+              <tr>
+                <td><strong>Mutational Edit Distance</strong></td>
+                <td>SNP & Indel quantification</td>
+                <td><code>Levenshtein Distance DP</code></td>
+                <td><code>O(m · n)</code></td>
+                <td><code>O(m · n)</code></td>
+              </tr>
+              <tr>
+                <td><strong>Transposition Mutation</strong></td>
+                <td>Adjacent inversion detection</td>
+                <td><code>Damerau–Levenshtein DP</code></td>
+                <td><code>O(m · n)</code></td>
+                <td><code>O(m · n)</code></td>
+              </tr>
+              <tr>
+                <td><strong>End-to-End Gene Homology</strong></td>
+                <td>Global paralog alignment (HbA vs HbS)</td>
+                <td><code>Needleman–Wunsch Alignment</code></td>
+                <td><code>O(m · n)</code></td>
+                <td><code>O(m · n)</code></td>
+              </tr>
+              <tr>
+                <td><strong>Conserved Domain Alignment</strong></td>
+                <td>Local catalytic motif discovery</td>
+                <td><code>Smith–Waterman Alignment</code></td>
+                <td><code>O(m · n)</code></td>
+                <td><code>O(m · n)</code></td>
+              </tr>
+              <tr>
+                <td><strong>Contig Read Assembly</strong></td>
+                <td>Shortest Common Superstring</td>
+                <td><code>Genomic Bitmask DP</code></td>
+                <td><code>O(k² · 2^k)</code></td>
+                <td><code>O(k · 2^k)</code></td>
+              </tr>
+              <tr>
+                <td><strong>Specimen Pipeline Max Flow</strong></td>
+                <td>Diagnostic specimen throughput</td>
+                <td><code>Ford–Fulkerson / Dinic</code></td>
+                <td><code>O(V² · E)</code></td>
+                <td><code>O(V + E)</code></td>
+              </tr>
+              <tr>
+                <td><strong>Cold-Chain Specimen Routing</strong></td>
+                <td>Minimum-transfer routing</td>
+                <td><code>Edmonds–Karp (BFS)</code></td>
+                <td><code>O(V · E²)</code></td>
+                <td><code>O(V + E)</code></td>
+              </tr>
+              <tr>
+                <td><strong>Clinical Personnel Matching</strong></td>
+                <td>Certified researcher assay allocation</td>
+                <td><code>Hopcroft–Karp Bipartite Matching</code></td>
+                <td><code>O(E · √V)</code></td>
+                <td><code>O(V + E)</code></td>
+              </tr>
+              <tr>
+                <td><strong>Trial Supervisor Duality</strong></td>
+                <td>Minimum conflict monitoring cover</td>
+                <td><code>König’s Theorem Duality</code></td>
+                <td><code>O(V · E)</code></td>
+                <td><code>O(V + E)</code></td>
+              </tr>
+              <tr>
+                <td><strong>Regulatory Circuit Logic</strong></td>
+                <td>Gene switch satisfiability</td>
+                <td><code>DPLL 3-SAT Solver</code></td>
+                <td><code>O(2^n) worst</code></td>
+                <td><code>O(n)</code></td>
+              </tr>
+              <tr>
+                <td><strong>Conflict-Free Biomarkers</strong></td>
+                <td>Multiplex panel interference prevention</td>
+                <td><code>CLIQUE → Independent Set</code></td>
+                <td><code>O(V²) reduction</code></td>
+                <td><code>O(V²)</code></td>
+              </tr>
+              <tr>
+                <td><strong>Genomic Read Record Sorting</strong></td>
+                <td>Library coordinate sorting</td>
+                <td><code>Randomized QuickSort</code></td>
+                <td><code>O(n log n) expected</code></td>
+                <td><code>O(log n)</code></td>
+              </tr>
+              <tr>
+                <td><strong>Sequencer Stream Sampling</strong></td>
+                <td>Unbiased cytometer sampling</td>
+                <td><code>Reservoir Sampling (Algorithm R)</code></td>
+                <td><code>O(N) single-pass</code></td>
+                <td><code>O(k)</code></td>
+              </tr>
+              <tr>
+                <td><strong>Coverage Cumulative Sums</strong></td>
+                <td>Chromosomal range index</td>
+                <td><code>Blelloch Parallel Prefix Scan</code></td>
+                <td><code>O(n) work / O(log n) span</code></td>
+                <td><code>O(n)</code></td>
+              </tr>
+              <tr>
+                <td><strong>Distributed Quality Metric</strong></td>
+                <td>Multi-core score aggregation</td>
+                <td><code>Parallel Binary Tree Reduction</code></td>
+                <td><code>O(n) work / O(log n) span</code></td>
+                <td><code>O(n)</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ========================================================== -->
+      <!-- 4. ALGORITHM COMPARISON LAB TAB                            -->
+      <!-- ========================================================== -->
+      <section id="tab-comparison" class="tab-section">
+        <div class="section-header">
+          <div class="section-label">Empirical Evaluation</div>
+          <h2 class="section-title">Side-by-Side Algorithm Comparison Lab</h2>
+          <p class="section-subtitle">
+            Evaluate multiple algorithmic paradigms against identical biological sequences to compare character comparisons, execution steps, and complexities.
+          </p>
+        </div>
+
+        <div class="adaptive-input-card" style="margin-bottom: 1.5rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <div style="font-weight: 700; color: var(--forest-green); margin-bottom: 0.25rem;">
+                Benchmark Biological Sequence:
+              </div>
+              <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-muted); word-break: break-all;">
+                Target Sequence (Human HBB Exon, 55 bp): <code style="color: var(--text-main);">ATGGTGCACCTGACTCCTGAGGAGAAGTCTGCCGTTACTGCCCTGTGGGGCAAG</code><br>
+                Query Pattern: <strong style="color: var(--forest-green);">ATG</strong>
+              </div>
+            </div>
+            <button id="comparison-run-btn" class="btn btn-primary">
+              <span>⚡</span> Run Side-by-Side Benchmark
+            </button>
+          </div>
+        </div>
+
+        <!-- Results Table -->
+        <div class="table-responsive" style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Algorithm</th>
+                <th>Matches</th>
+                <th>Comparisons</th>
+                <th>Simulation Steps</th>
+                <th>Browser Demo Runtime*</th>
+                <th>Time Complexity</th>
+                <th>Space Complexity</th>
+              </tr>
+            </thead>
+            <tbody id="comparison-results-tbody">
+              <tr>
+                <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                  Click "Run Side-by-Side Benchmark" to evaluate all string algorithms on the biological dataset.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--text-light); line-height: 1.5;">
+          <em>*Note: "Browser demo runtime" measures single-thread Javascript execution in your browser window. It is an educational demonstration metric rather than an isolated hardware microbenchmark.</em>
+        </div>
+      </section>
+
+      <!-- ========================================================== -->
+      <!-- 5. ABOUT TAB                                               -->
+      <!-- ========================================================== -->
+      <section id="tab-about" class="tab-section">
+        <div class="section-header">
+          <div class="section-label">Platform Overview</div>
+          <h2 class="section-title">About BioGenome</h2>
+          <p class="section-subtitle">
+            A Modern Bioinformatics Platform Demonstrating Data Structures and Algorithms Through Biological Use Cases.
+          </p>
+        </div>
+
+        <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 2rem; box-shadow: var(--shadow-xs);">
+          <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--forest-green); margin-bottom: 0.75rem;">
+            Architecture & Pedagogical Philosophy
+          </h3>
+          <p style="font-size: 0.92rem; line-height: 1.65; color: var(--text-body); margin-bottom: 1.25rem;">
+            <strong>BioGenome</strong> is an interactive educational bioinformatics platform designed for Data Structures & Algorithms demonstrations. It pairs classical computer science algorithms with real biological applications—ensuring that biology is the primary language of the interface while keeping DSA terminology prominent and clear.
+          </p>
+
+          <h4 style="font-size: 0.95rem; font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.65rem;">Core Design Tenets:</h4>
+          <ul style="padding-left: 1.5rem; font-size: 0.9rem; line-height: 1.6; color: var(--text-muted);">
+            <li><strong>Biological First:</strong> Navigation, terminology, and problem framing begin with the genuine biological challenge.</li>
+            <li><strong>Authentic Computation:</strong> Algorithms calculate true mathematical intermediate states (true LPS tables, Z-boxes, exact rolling hashes, DP matrices, flow paths) without artificial mock animations.</li>
+            <li><strong>Restrained Scientific Aesthetics:</strong> Built with warm ivory surfaces, dark forest green accents, muted sage, and deep teal, prioritizing readability and calm focus.</li>
+            <li><strong>100% Client-Side Architecture:</strong> Runs directly inside any modern web browser with zero external backend or database dependencies.</li>
+          </ul>
+
+          <div style="margin-top: 2rem; padding: 1.25rem; background: var(--bg-subtle); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); font-size: 0.85rem; color: var(--text-muted); line-height: 1.55;">
+            <strong>Educational Dataset Disclaimer:</strong> All genomic sequences (promoters, exons, cleavage sites) and experimental records in this platform are educational approximations labeled <em>"Simulated Educational Dataset"</em>. They are designed exclusively for algorithmic instruction and do not constitute clinical diagnostic determinations.
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ============================================================== -->
+  <!-- Footer                                                         -->
+  <!-- ============================================================== -->
+  <footer class="app-footer">
+    <div class="container footer-content">
+      <div>
+        <strong>BioGenome</strong> — Biological Sequence Algorithms Platform
+      </div>
+      <div style="color: var(--text-light); font-size: 0.8rem;">
+        DSA-3 Academic Demonstration • Client-Side Laboratory v3.8
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts: Modular Vanilla JavaScript -->
+  <script src="js/engine.js"></script>
+  <script src="js/datasets.js"></script>
+  <script src="js/simulations/string-sims.js"></script>
+  <script src="js/simulations/suffix-sims.js"></script>
+  <script src="js/simulations/dp-sims.js"></script>
+  <script src="js/simulations/flow-sims.js"></script>
+  <script src="js/simulations/np-sims.js"></script>
+  <script src="js/simulations/randomized-sims.js"></script>
+  <script src="js/simulations/parallel-sims.js"></script>
+  <script src="js/simulations/comparison-sims.js"></script>
+  <script src="js/renderers.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

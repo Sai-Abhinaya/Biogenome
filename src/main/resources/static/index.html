@@ -1,888 +1,768 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BioGenome – Genome Research &amp; Analysis Platform</title>
-  <meta name="description" content="Interactive genomics dashboard for DNA algorithms: KMP, Z-Algorithm, Rabin-Karp, Aho-Corasick, Suffix Structures, Needleman-Wunsch, Smith-Waterman."/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <style>
-    :root{--bg:#0a0d14;--bg2:#111520;--card:#151b2a;--border:rgba(99,179,237,.12);--borderA:rgba(99,179,237,.35);--txt:#e2e8f0;--txt2:#8899bb;--muted:#4a5568;--blue:#63b3ed;--cyan:#4fd1c5;--purple:#9f7aea;--green:#68d391;--yellow:#f6e05e;--pink:#f687b3;--shadow:0 4px 24px rgba(0,0,0,.35);}
-    *{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden;}
-    body::before{content:'';position:fixed;top:-150px;left:-150px;width:500px;height:500px;background:radial-gradient(circle,rgba(99,179,237,.06) 0%,transparent 70%);pointer-events:none;}
-    body::after{content:'';position:fixed;bottom:-150px;right:-150px;width:500px;height:500px;background:radial-gradient(circle,rgba(159,122,234,.06) 0%,transparent 70%);pointer-events:none;}
-    header{background:rgba(17,21,32,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
-    .logo{display:flex;align-items:center;gap:12px;}
-    .logo-icon{width:34px;height:34px;background:linear-gradient(135deg,#4facfe,#00f2fe);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;}
-    .logo h1{font-size:17px;font-weight:700;background:linear-gradient(135deg,#4facfe,#00f2fe);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-    .logo p{font-size:11px;color:var(--txt2);}
-    .badge{background:rgba(99,179,237,.1);border:1px solid var(--borderA);border-radius:20px;padding:4px 13px;font-size:11px;color:var(--blue);font-weight:500;}
-    .layout{display:flex;min-height:calc(100vh - 62px);}
-    aside{width:252px;min-width:252px;background:var(--bg2);border-right:1px solid var(--border);padding:20px 0;position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto;}
-    .sec-label{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;padding:12px 18px 5px;}
-    .nav-item{display:flex;align-items:center;gap:9px;padding:9px 18px;cursor:pointer;font-size:13px;color:var(--txt2);border-left:2px solid transparent;transition:all .18s;user-select:none;}
-    .nav-item:hover{background:rgba(99,179,237,.06);color:var(--txt);}
-    .nav-item.active{background:rgba(99,179,237,.1);color:var(--blue);border-left-color:var(--blue);font-weight:600;}
-    .nav-item .ico{font-size:15px;}
-    .nbadge{margin-left:auto;background:rgba(99,179,237,.15);color:var(--blue);font-size:10px;padding:1px 7px;border-radius:10px;font-weight:600;}
-    main{flex:1;padding:28px;overflow-y:auto;}
-    .ptitle{margin-bottom:24px;}
-    .ptitle h2{font-size:22px;font-weight:700;margin-bottom:5px;}
-    .ptitle p{color:var(--txt2);font-size:13.5px;}
-    .g1{background:linear-gradient(135deg,#4facfe,#00f2fe);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-    .g2{background:linear-gradient(135deg,#43e97b,#38f9d7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-    .g3{background:linear-gradient(135deg,#fa709a,#fee140);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-    .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:18px;transition:border-color .2s,box-shadow .2s;}
-    .card:hover{border-color:var(--borderA);box-shadow:var(--shadow);}
-    .ctitle{font-size:14.5px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:9px;}
-    .ctitle span{font-size:17px;}
-    .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-    .fgrid.c3{grid-template-columns:1fr 1fr 1fr;}
-    .fgrid.c1{grid-template-columns:1fr;}
-    .fg{display:flex;flex-direction:column;gap:5px;}
-    .fg label{font-size:11.5px;font-weight:500;color:var(--txt2);}
-    .fg input,.fg textarea,.fg select{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;padding:8px 11px;color:var(--txt);font-size:12.5px;font-family:'JetBrains Mono',monospace;outline:none;transition:border-color .2s;resize:vertical;}
-    .fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--blue);}
-    .fg select option{background:var(--card);}
-    .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .18s;font-family:inherit;}
-    .btn-p{background:linear-gradient(135deg,#4299e1,#3182ce);color:#fff;box-shadow:0 4px 14px rgba(66,153,225,.3);}
-    .btn-p:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(66,153,225,.4);}
-    .btn-s{background:rgba(99,179,237,.1);color:var(--blue);border:1px solid var(--borderA);}
-    .btn-s:hover{background:rgba(99,179,237,.18);}
-    .btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
-    .brow{display:flex;gap:9px;margin-top:14px;flex-wrap:wrap;}
-    .spinner{display:none;width:16px;height:16px;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .65s linear infinite;}
-    @keyframes spin{to{transform:rotate(360deg);}}
-    .result{display:none;}
-    .result.on{display:block;animation:fadeIn .3s ease;}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-    .srow{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:18px;}
-    .sc{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;}
-    .sv{font-size:24px;font-weight:700;line-height:1;margin-bottom:3px;}
-    .sl{font-size:10.5px;color:var(--txt2);font-weight:500;text-transform:uppercase;letter-spacing:.5px;}
-    .cb{color:var(--blue)}.cg{color:var(--green)}.cp{color:var(--purple)}.cy{color:var(--yellow)}.ck{color:var(--pink)}.cc{color:var(--cyan)}
-    .seqviz{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:2;word-break:break-all;background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:10px;padding:14px;max-height:170px;overflow-y:auto;white-space:pre-wrap;}
-    .match{background:rgba(99,179,237,.22);color:#90cdf4;border-radius:3px;padding:1px 2px;font-weight:700;}
-    .norm{color:var(--txt2);}
-    .pit-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:10px;}
-    .pit{border-collapse:collapse;width:100%;font-family:'JetBrains Mono',monospace;font-size:12px;}
-    .pit th,.pit td{text-align:center;padding:7px 9px;border:1px solid var(--border);}
-    .pit th{background:rgba(99,179,237,.08);color:var(--blue);}
-    .pit td{color:var(--txt2);}
-    .chart-c{position:relative;height:210px;}
-    .dpwrap{overflow:auto;border:1px solid var(--border);border-radius:10px;}
-    .dpt{border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:11px;}
-    .dpt td,.dpt th{padding:4px 7px;border:1px solid var(--border);text-align:center;min-width:30px;}
-    .dpt th{background:rgba(99,179,237,.1);color:var(--blue);font-weight:600;}
-    .dpm{background:rgba(99,179,237,.2);color:#90cdf4;font-weight:700;}
-    .dppos{color:var(--green)}.dpneg{color:var(--pink)}
-    .abox{background:rgba(0,0,0,.22);border:1px solid var(--border);border-radius:10px;padding:14px;font-family:'JetBrains Mono',monospace;font-size:13px;overflow-x:auto;}
-    .arow{white-space:nowrap;line-height:1.85;}
-    .albl{color:var(--muted);font-size:11px;margin-right:7px;}
-    .aseq{color:var(--txt);}
-    .amid{color:var(--green);}
-    .stab{width:100%;border-collapse:collapse;font-size:12px;font-family:'JetBrains Mono',monospace;}
-    .stab th{background:rgba(99,179,237,.08);color:var(--blue);padding:7px 11px;text-align:left;border-bottom:1px solid var(--border);}
-    .stab td{padding:6px 11px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--txt2);}
-    .stab tr:hover td{background:rgba(99,179,237,.04);color:var(--txt);}
-    .stab .mr td{color:var(--cyan);font-weight:600;}
-    .cxtag{display:inline-flex;align-items:center;gap:5px;background:rgba(159,122,234,.1);border:1px solid rgba(159,122,234,.3);border-radius:6px;padding:4px 11px;font-size:11.5px;color:var(--purple);font-family:'JetBrains Mono',monospace;font-weight:500;margin-top:10px;}
-    .alert{padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:12px;}
-    .ai{background:rgba(99,179,237,.08);border:1px solid var(--borderA);color:var(--blue);}
-    .page{display:none;}
-    .page.on{display:block;}
-    ::-webkit-scrollbar{width:5px;height:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(99,179,237,.2);border-radius:3px;}
-    @media(max-width:768px){aside{display:none;}.fgrid{grid-template-columns:1fr;}}
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BioGenome – Genome Research & Analysis Platform</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <a href="#" class="brand-badge" data-target="tab-dashboard">
+          <span class="brand-icon">🧬</span>
+          <div>
+            <div class="brand-title">BioGenome</div>
+            <span class="brand-subtitle">Research Platform</span>
+          </div>
+        </a>
+      </div>
 
-<header>
-  <div class="logo">
-    <div class="logo-icon">🧬</div>
-    <div>
-      <h1>BioGenome</h1>
-      <p>Genome Research &amp; Analysis Platform</p>
+      <nav class="sidebar-nav">
+        <div class="nav-group-title">Overview</div>
+        <a href="#" class="nav-link active" data-target="tab-dashboard">
+          <span class="nav-icon">📊</span> Dashboard
+        </a>
+
+        <div class="nav-group-title">Genomics Laboratories</div>
+        <a href="#" class="nav-link" data-target="tab-explorer">
+          <span class="nav-icon">🧬</span> Genome Explorer
+        </a>
+        <a href="#" class="nav-link" data-target="tab-motif">
+          <span class="nav-icon">🔎</span> DNA Motif Discovery
+        </a>
+        <a href="#" class="nav-link" data-target="tab-indexing">
+          <span class="nav-icon">📚</span> Genome Indexing
+        </a>
+        <a href="#" class="nav-link" data-target="tab-alignment">
+          <span class="nav-icon">🧬</span> Sequence Alignment
+        </a>
+        <a href="#" class="nav-link" data-target="tab-variants">
+          <span class="nav-icon">🧪</span> Variant Analysis
+        </a>
+
+        <div class="nav-group-title">Systems & Logistics</div>
+        <a href="#" class="nav-link" data-target="tab-flow">
+          <span class="nav-icon">🕸️</span> Biological Networks
+        </a>
+        <a href="#" class="nav-link" data-target="tab-matching">
+          <span class="nav-icon">👥</span> Resource Allocation
+        </a>
+        <a href="#" class="nav-link" data-target="tab-constraints">
+          <span class="nav-icon">🧠</span> Constraint Analysis
+        </a>
+        <a href="#" class="nav-link" data-target="tab-analytics">
+          <span class="nav-icon">⚡</span> Genome Analytics
+        </a>
+
+        <div class="nav-group-title">Evaluation & Audit</div>
+        <a href="#" class="nav-link" data-target="tab-comparison">
+          <span class="nav-icon">⚖️</span> Algorithm Benchmark Lab
+        </a>
+        <a href="#" class="nav-link" data-target="tab-datasets">
+          <span class="nav-icon">📁</span> Research Datasets
+        </a>
+        <a href="#" class="nav-link" data-target="tab-history">
+          <span class="nav-icon">📜</span> Analysis History
+        </a>
+        <a href="#" class="nav-link" data-target="tab-about">
+          <span class="nav-icon">ℹ️</span> System Information
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span>DSA-3 Viva Edition v3.0</span>
+        <span class="complexity-badge">Java 17</span>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <!-- Top Navigation Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="breadcrumb-label">
+            <span id="current-page-title">Dashboard</span>
+            <span class="module-tag">Academic DSA Platform</span>
+          </div>
+          <div class="topbar-search">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="global-search-input" placeholder="Search sequences, variants, motifs, algorithms...">
+            <div id="global-search-overlay" class="search-results-overlay"></div>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div id="backend-status" class="status-indicator">
+            <span class="status-dot"></span> Checking backend...
+          </div>
+          <button id="theme-toggle-btn" class="btn-icon" title="Toggle theme palette">
+            🌗
+          </button>
+        </div>
+      </header>
+
+      <!-- Scrollable Main Content -->
+      <main class="content-viewport">
+
+        <!-- ==================== TAB: DASHBOARD ==================== -->
+        <section id="tab-dashboard" class="tab-section active">
+          <div class="page-header">
+            <h1 class="page-title">BioGenome – Genome Research & Analysis Platform</h1>
+            <p class="page-description">Computational Analysis of Biological Sequences Powered by Classical Data Structures & Algorithms</p>
+          </div>
+
+          <!-- Key Metrics -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-label">Genome Sequences</span>
+              <span id="dash-sequences" class="stat-value">4</span>
+              <span class="stat-detail">E. coli, HBB HbA/HbS, SARS-CoV-2</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Total Analyzed Bases</span>
+              <span id="dash-bases" class="stat-value">1,142 bp</span>
+              <span class="stat-detail">Reference coding loci</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Average GC Content</span>
+              <span id="dash-gc" class="stat-value">51.4%</span>
+              <span class="stat-detail">Thermodynamic stability</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Genomic Variants</span>
+              <span id="dash-variants" class="stat-value">4</span>
+              <span class="stat-detail">BRCA1, TP53, CFTR, EGFR</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Active Experiments</span>
+              <span id="dash-experiments" class="stat-value">8</span>
+              <span class="stat-detail">Bipartite matched pipelines</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Certified Personnel</span>
+              <span id="dash-researchers" class="stat-value">8</span>
+              <span class="stat-detail">Bioinformatics specialists</span>
+            </div>
+          </div>
+
+          <!-- Quick Actions & Core Scientific Modules -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🔬 Scientific Workflow Operations</div>
+              <span class="card-subtitle">Select a bioinformatics research task below</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+              <div style="padding: 1rem; border: 1px solid var(--border-light); border-radius: var(--radius-md); background-color: var(--bg-surface-subtle);">
+                <div style="font-weight: 600; color: var(--primary-blue);">DNA Motif Discovery</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin: 0.25rem 0 0.75rem 0;">Exact Pattern Matching (KMP Algorithm, Z-Algorithm, Rabin-Karp)</div>
+                <button class="btn btn-secondary" onclick="switchTab('tab-motif')">Open Motif Lab</button>
+              </div>
+              <div style="padding: 1rem; border: 1px solid var(--border-light); border-radius: var(--radius-md); background-color: var(--bg-surface-subtle);">
+                <div style="font-weight: 600; color: var(--teal-accent);">Genome Indexing & Suffix Structures</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin: 0.25rem 0 0.75rem 0;">Linear-Time Suffix Array (SA-IS), Kasai LCP & Tandem Repeats</div>
+                <button class="btn btn-secondary" onclick="switchTab('tab-indexing')">Open Indexing Lab</button>
+              </div>
+              <div style="padding: 1rem; border: 1px solid var(--border-light); border-radius: var(--radius-md); background-color: var(--bg-surface-subtle);">
+                <div style="font-weight: 600; color: var(--purple-accent);">Sequence Homology & Alignment</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin: 0.25rem 0 0.75rem 0;">Global (Needleman-Wunsch) & Local (Smith-Waterman) Dynamic Programming</div>
+                <button class="btn btn-secondary" onclick="switchTab('tab-alignment')">Open Alignment Lab</button>
+              </div>
+              <div style="padding: 1rem; border: 1px solid var(--border-light); border-radius: var(--radius-md); background-color: var(--bg-surface-subtle);">
+                <div style="font-weight: 600; color: var(--green-accent);">Laboratory Network Optimization</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin: 0.25rem 0 0.75rem 0;">Max-Flow (Ford-Fulkerson, Dinic) & Max-Flow Min-Cut Bottlenecks</div>
+                <button class="btn btn-secondary" onclick="switchTab('tab-flow')">Open Network Lab</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Analyses Audit Table -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📜 Recent Analysis Session History</div>
+              <button class="btn btn-secondary" onclick="loadRecentHistory()">Refresh Log</button>
+            </div>
+            <div class="table-responsive">
+              <table class="scientific-table">
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>Computational Method</th>
+                    <th>Scientific Module</th>
+                    <th>Result Summary</th>
+                    <th>Runtime</th>
+                  </tr>
+                </thead>
+                <tbody id="history-tbody">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB: GENOME EXPLORER ==================== -->
+        <section id="tab-explorer" class="tab-section">
+          <div class="page-header">
+            <h1 class="page-title">🧬 Genome Explorer</h1>
+            <p class="page-description">Inspect DNA nucleotide composition, compute physical GC ratios, and validate biological sequence integrity.</p>
+          </div>
+
+          <div class="scientific-layer-box">
+            <div class="layer-item">
+              <span class="layer-tag">1. Scientific Purpose</span>
+              <div class="layer-content">Quantify biological nucleotide frequencies (A, C, G, T) to evaluate melting temperature (Tm), PCR primer annealing efficiency, and isochore GC-density across chromosomes.</div>
+            </div>
+            <div class="layer-item">
+              <span class="layer-tag method">2. Computational Method</span>
+              <div class="layer-content"><strong>Single-Pass Linear Array Scan</strong> with Character Frequency Map | Time Complexity: <strong>O(N)</strong> | Space: <strong>O(1)</strong></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">DNA Sequence Analyzer</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Input or Paste Nucleotide Sequence (A, C, G, T):</label>
+              <textarea id="explorer-input-seq" class="form-control" rows="4">ATGCGATCGATCGGCTAATCGATCGAACCGTTAGGCTAA</textarea>
+            </div>
+            <div style="margin-top: 1rem;">
+              <button id="btn-analyze-seq" class="btn btn-primary">Run Composition Analysis</button>
+            </div>
+
+            <div style="margin-top: 1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+              <div class="stat-card">
+                <span class="stat-label">Sequence Length</span>
+                <span id="res-seq-len" class="stat-value">39 bp</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-label">GC Content</span>
+                <span id="res-seq-gc" class="stat-value">46.15%</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-label">AT Content</span>
+                <span id="res-seq-at" class="stat-value">53.85%</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-label">Base Breakdown</span>
+                <span id="res-seq-counts" class="stat-detail" style="font-size: 0.95rem; font-weight: 600; margin-top: 0.5rem;">A: 11 | C: 8 | G: 10 | T: 10</span>
+              </div>
+            </div>
+
+            <div style="margin-top: 1rem; padding: 0.75rem; background-color: var(--bg-surface-subtle); border-radius: var(--radius-md); font-family: var(--font-mono); font-size: 0.85rem;">
+              <strong>Reverse Complement (5' -> 3'):</strong> <span id="res-seq-revcomp">TTAGCCTAACGGTTCGATCGATTAGCCGATCGATCGCAT</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB: DNA MOTIF DISCOVERY ==================== -->
+        <section id="tab-motif" class="tab-section">
+          <div class="page-header">
+            <h1 class="page-title">🔎 DNA Motif Discovery</h1>
+            <p class="page-description">Identify transcription factor binding sites, promoter elements, and restriction enzyme recognition motifs.</p>
+          </div>
+
+          <div class="scientific-layer-box">
+            <div class="layer-item">
+              <span class="layer-tag">1. Scientific Purpose</span>
+              <div class="layer-content">Locate specific regulatory sequences such as TATA boxes (TATAAA) and DnaA replication origin consensus sequences without redundant character backtracking.</div>
+            </div>
+            <div class="layer-item">
+              <span class="layer-tag method">2. Computational Method</span>
+              <div class="layer-content"><strong>Exact Pattern Matching (Knuth-Morris-Pratt / KMP)</strong> using precomputed failure function π (Longest Proper Prefix which is also a Suffix)</div>
+            </div>
+          </div>
+
+          <!-- Interactive KMP Step Visualizer -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Educational Step-by-Step Visualization (KMP Sliding Window)</div>
+              <span class="card-subtitle">Visualizes pattern window sliding without backtracking in text</span>
+            </div>
+
+            <div class="visualizer-controls">
+              <div class="controls-left">
+                <button id="kmp-prev" class="btn btn-secondary">⏮ Previous Step</button>
+                <button id="kmp-play" class="btn btn-primary">⏯ Play / Pause</button>
+                <button id="kmp-next" class="btn btn-secondary">⏭ Next Step</button>
+                <button id="kmp-reset" class="btn btn-secondary">🔄 Reset</button>
+              </div>
+              <div class="controls-right">
+                <span class="complexity-badge">Time: O(N + M) | Space: O(M)</span>
+              </div>
+            </div>
+
+            <div id="kmp-interactive-container" style="padding: 1rem; background-color: var(--bg-surface); border: 1px solid var(--border-light); border-radius: var(--radius-md);">
+              <!-- Rendered via KmpVisualizer -->
+            </div>
+          </div>
+
+          <!-- Live Motif Search Form -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Live Motif Search Execution</div>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Algorithm Selection:</label>
+                <select id="motif-algo-select" class="form-select">
+                  <option value="KMP">Exact Pattern Matching (KMP)</option>
+                  <option value="Z-Algorithm">Repeated Pattern Detection (Z-Algorithm)</option>
+                  <option value="Rabin-Karp">Rolling Polynomial Hash (Rabin-Karp)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Target Motif Pattern (e.g. ACCAC, TATA):</label>
+                <input type="text" id="motif-pat-input" class="form-control" value="ACCAC">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Target DNA Sequence (Default: E. coli oriC):</label>
+              <textarea id="motif-seq-input" class="form-control" rows="3">CGTTTTTTCATTGACACCACCCACACCACACCACCGGTTTCACCGGCACCAC</textarea>
+            </div>
+            <div style="margin-top: 1rem; display: flex; gap: 0.75rem;">
+              <button id="btn-run-motif-search" class="btn btn-primary">Search Motif</button>
+              <button id="btn-compare-motifs" class="btn btn-teal">Run Side-by-Side Benchmark</button>
+            </div>
+
+            <div id="motif-results-box" style="display: none; margin-top: 1.25rem;" class="scientific-layer-box">
+              <div class="layer-item">
+                <span class="layer-tag result">3. Execution Results</span>
+                <div class="layer-content">
+                  <div>Occurrences: <strong id="motif-res-count">--</strong></div>
+                  <div>Empirical Execution Time: <strong id="motif-res-time">--</strong></div>
+                  <div>Theoretical Complexity: <span id="motif-res-complexity" class="complexity-badge">--</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Comparison Table -->
+            <div style="margin-top: 1.5rem;">
+              <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem;">Comparative Algorithm Benchmark (KMP vs Z vs Rabin-Karp):</div>
+              <div class="table-responsive">
+                <table class="scientific-table">
+                  <thead>
+                    <tr>
+                      <th>Algorithm</th>
+                      <th>Matches Found</th>
+                      <th>Execution Time</th>
+                      <th>Time Complexity</th>
+                      <th>Space Complexity</th>
+                    </tr>
+                  </thead>
+                  <tbody id="motif-compare-tbody">
+                    <tr><td colspan="5" style="text-align: center; color: var(--text-muted);">Click "Run Side-by-Side Benchmark" to evaluate algorithms.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB: GENOME INDEXING ==================== -->
+        <section id="tab-indexing" class="tab-section">
+          <div class="page-header">
+            <h1 class="page-title">📚 Genome Indexing & Suffix Structures</h1>
+            <p class="page-description">Pre-process whole reference genomes into sub-linear searchable topological suffix structures.</p>
+          </div>
+
+          <div class="scientific-layer-box">
+            <div class="layer-item">
+              <span class="layer-tag">1. Scientific Purpose</span>
+              <div class="layer-content">Enable sub-linear exact queries O(M log N) across whole gigabase genomes and rapidly identify repetitive elements (LINEs, SINEs, tandem repeats).</div>
+            </div>
+            <div class="layer-item">
+              <span class="layer-tag method">2. Computational Method</span>
+              <div class="layer-content"><strong>Suffix Array (SA-IS Linear Time)</strong> with <strong>Kasai's LCP Array</strong> and <strong>Suffix Automaton (Minimal DFA)</strong></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Suffix Array Suffix Table Preview (Sample: 20 bp prefix)</div>
+            </div>
+            <div class="table-responsive">
+              <table class="scientific-table">
+                <thead>
+                  <tr>
+                    <th>Rank i</th>
+                    <th>Suffix Offset (SA[i])</th>
+                    <th>Kasai LCP[i]</th>
+                    <th>Suffix String Representation</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>0</td><td>12</td><td>0</td><td><code style="font-family: var(--font-mono);">ACCACCCACACCACACCACCGG...</code></td></tr>
+                  <tr><td>1</td><td>17</td><td>5</td><td><code style="font-family: var(--font-mono);">ACCACACCACCGGTTTCACCGG...</code></td></tr>
+                  <tr><td>2</td><td>22</td><td>5</td><td><code style="font-family: var(--font-mono);">ACCACCGGTTTCACCGGCACCAC...</code></td></tr>
+                  <tr><td>3</td><td>45</td><td>5</td><td><code style="font-family: var(--font-mono);">ACCAC...</code></td></tr>
+                  <tr><td>4</td><td>11</td><td>1</td><td><code style="font-family: var(--font-mono);">CACCACCCACACCACACCACCGG...</code></td></tr>
+                  <tr><td>5</td><td>16</td><td>4</td><td><code style="font-family: var(--font-mono);">CACCACACCACCGGTTTCACCGG...</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB: SEQUENCE ALIGNMENT ==================== -->
+        <section id="tab-alignment" class="tab-section">
+          <div class="page-header">
+            <h1 class="page-title">🧬 Sequence Alignment & Error Analysis</h1>
+            <p class="page-description">Pairwise global and local sequence comparison, evolutionary homology detection, and sequencing error correction.</p>
+          </div>
+
+          <div class="scientific-layer-box">
+            <div class="layer-item">
+              <span class="layer-tag">1. Scientific Purpose</span>
+              <div class="layer-content">Measure evolutionary homology between homologous genes (e.g. wild-type HbA vs sickle-cell HbS) and detect point mutations, indels, and optical sequencing transpositions.</div>
+            </div>
+            <div class="layer-item">
+              <span class="layer-tag method">2. Computational Method</span>
+              <div class="layer-content"><strong>Needleman-Wunsch (Global)</strong>, <strong>Smith-Waterman (Local)</strong>, and <strong>Damerau-Levenshtein (Edit Distance)</strong> Dynamic Programming</div>
+            </div>
+          </div>
+
+          <!-- DP Matrix Filling Visualizer -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Dynamic Programming Matrix Visualization (Needleman-Wunsch)</div>
+              <span class="card-subtitle">Visualizes cell scoring: Score(i,j) = max(diag + match, up - gap, left - gap)</span>
+            </div>
+
+            <div class="visualizer-controls">
+              <div class="controls-left">
+                <button id="nw-prev" class="btn btn-secondary">⏮ Previous Cell</button>
+                <button id="nw-play" class="btn btn-primary">⏯ Play / Pause</button>
+                <button id="nw-next" class="btn btn-secondary">⏭ Next Cell</button>
+                <button id="nw-reset" class="btn btn-secondary">🔄 Reset</button>
+              </div>
+              <div class="controls-right">
+                <span class="complexity-badge">Time: O(N * M) | Space: O(N * M)</span>
+              </div>
+            </div>
+
+            <div class="canvas-container">
+              <canvas id="nw-matrix-canvas" class="interactive-canvas"></canvas>
+            </div>
+          </div>
+
+          <!-- Alignment Execution Form -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Pairwise Sequence Alignment Runner</div>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Alignment Method:</label>
+                <select id="align-type-select" class="form-select">
+                  <option value="needleman-wunsch">Global Homology (Needleman-Wunsch)</option>
+                  <option value="smith-waterman">Local Conserved Domain (Smith-Waterman)</option>
+                  <option value="levenshtein">Point Mutation Edit Distance (Levenshtein)</option>
+                  <option value="damerau">Transposition Error Correction (Damerau-Levenshtein)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Sequence 1 (Reference Locus):</label>
+                <input type="text" id="align-seq1" class="form-control" value="ATGGTGCACCTGACTCCTGAGGAGAAGTCT">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Sequence 2 (Variant / Read):</label>
+                <input type="text" id="align-seq2" class="form-control" value="ATGGTGCACCTGACTCCTGTGGAGAAGTCT">
+              </div>
+            </div>
+            <button id="btn-run-alignment" class="btn btn-primary">Run Sequence Alignment</button>
+
+            <div id="align-results-box" style="display: none; margin-top: 1.25rem;">
+              <div class="scientific-layer-box">
+                <div class="layer-item">
+                  <span class="layer-tag result">3. Alignment Results</span>
+                  <div class="layer-content">
+                    <div>Alignment Metric: <strong id="align-res-score">--</strong></div>
+                    <div>Identity Percentage: <strong id="align-res-identity">--</strong></div>
+                    <div>Execution Runtime: <strong id="align-res-time">--</strong></div>
+                  </div>
+                </div>
+              </div>
+              <div style="font-weight: 600; font-size: 0.85rem; margin-bottom: 0.35rem;">Traceback Visual Alignment:</div>
+              <div id="align-res-traceback" class="alignment-display"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB: VARIANT ANALYSIS ==================== -->
+        <section id="tab-variants" class="tab-section">
+          <div class="page-header">
+            <h1 class="page-title">🧪 Genetic Variant Analysis</h1>
+            <p class="page-description">Catalog and filter clinically significant single nucleotide polymorphisms (SNPs) and indel mutations.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Educational Variant Repository</div>
+              <span class="card-subtitle">Sample simulated phenotype variants</span>
+            </div>
+            <div class="table-responsive">
+              <table class="scientific-table">
+                <thead>
+                  <tr>
+                    <th>Variant ID</th>
+                    <th>Gene</th>
+                    <th>Chr Pos</th>
+                    <th>Ref > Alt</th>
+                    <th>Variant Type</th>
+                    <th>Clinical Impact</th>
+                    <th>Molecular Consequence</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>VAR-001</td><td><strong>BRCA1</strong></td><td>41244421</td><td>T > G</td><td><span class="complexity-badge">Missense</span></td><td>Pathogenic</td><td>Cys61Gly RING domain disruptor</td></tr>
+                  <tr><td>VAR-002</td><td><strong>TP53</strong></td><td>7577120</td><td>G > A</td><td><span class="complexity-badge">Missense</span></td><td>Pathogenic</td><td>Arg175His hot-spot mutation</td></tr>
+                  <tr><td>VAR-003</td><td><strong>CFTR</strong></td><td>117199644</td><td>CTT > -</td><td><span class="complexity-badge">Deletion</span></td><td>Pathogenic</td><td>p.Phe508del (DeltaF508)</td></tr>
+                  <tr><td>VAR-004</td><td><strong>EGFR</strong></td><td>55242465</td><td>- > GCC</td><td><span class="complexity-badge">Insertion</span></td><td>Likely Pathogenic</td><td>Exon 20 kinase insertion</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB: BIOLOGICAL NETWORKS ==================== -->
+        <section id="tab-flow" class="tab-section">
+          <div class="page-header">
+            <h1 class="page-title">🕸️ Biological Network Analysis</h1>
+            <p class="page-description">Model laboratory workflow pipelines, specimen transportation logistics, and pipeline bottleneck diagnostics.</p>
+          </div>
+
+          <div class="scientific-layer-box">
+            <div class="layer-item">
+              <span class="layer-tag">1. Scientific Purpose</span>
+              <div class="layer-content">Maximize specimen throughput through central laboratories, sequencer pools, and analytical pipelines while identifying capacity bottlenecks.</div>
+            </div>
+            <div class="layer-item">
+              <span class="layer-tag method">2. Computational Method</span>
+              <div class="layer-content"><strong>Dinic's Algorithm / Ford-Fulkerson</strong> with <strong>Max-Flow Min-Cut Theorem</strong> verification</div>
+            </div>
+          </div>
+
+          <!-- Network Canvas -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Laboratory Logistics Network Graph</div>
+              <button id="flow-toggle-cut" class="btn btn-secondary">Highlight Min-Cut Bottlenecks</button>
+            </div>
+            <div class="canvas-container" style="min-height: 320px;">
+              <canvas id="flow-graph-canvas" class="interactive-canvas"></canvas>
+            </div>
+            <div style="margin-top: 1rem; display: flex; gap: 1rem; align-items: center;">
+              <select id="flow-algo-select" class="form-select" style="max-width: 250px;">
+                <option value="dinic">Dinic's Blocking Flow (O(V^2 * E))</option>
+                <option value="edmonds-karp">Edmonds-Karp BFS (O(V * E^2))</option>
+                <option value="ford-fulkerson">Ford-Fulkerson DFS (O(E * |f*|))</option>
+              </select>
+              <button id="btn-run-flow" class="btn btn-primary">Compute Maximum Flow</button>
+            </div>
+
+            <div id="flow-results-box" style="display: none; margin-top: 1.25rem;" class="scientific-layer-box">
+              <div class="layer-item">
+                <span class="layer-tag result">3. Network Flow & Bottleneck Results</span>
+                <div class="layer-content">
+                  <div>Maximum Network Flow: <strong id="flow-res-maxflow">--</strong></div>
+                  <div>Minimum Cut Capacity: <strong id="flow-res-mincut">--</strong></div>
+                  <div style="margin-top: 0.5rem; font-weight: 600;">Augmenting Paths:</div>
+                  <ul id="flow-res-paths" style="margin-left: 1.25rem; font-size: 0.85rem;"></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB: RESOURCE ALLOCATION ==================== -->
+        <section id="tab-matching" class="tab-section">
+          <div class="page-header">
+            <h1 class="page-title">👥 Resource Allocation & Bipartite Matching</h1>
+            <p class="page-description">Match certified genomic researchers to specialized experimental protocols and resolve platform resource conflicts.</p>
+          </div>
+
+          <div class="scientific-layer-box">
+            <div class="layer-item">
+              <span class="layer-tag">1. Scientific Purpose</span>
+              <div class="layer-content">Fairly assign specialized researchers to clinical trials based on strict credential requirements, and identify minimal conflict sets using König's theorem.</div>
+            </div>
+            <div class="layer-item">
+              <span class="layer-tag method">2. Computational Method</span>
+              <div class="layer-content"><strong>Hopcroft-Karp / Dinic Bipartite Matching</strong> with <strong>König's Theorem Verification (|Max Matching| = |Min Vertex Cover|)</strong></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Researcher-to-Experiment Assignment Solver</div>
+            </div>
+            <button id="btn-run-matching" class="btn btn-primary">Solve Bipartite Matching</button>
+
+            <div id="matching-results-box" style="display: none; margin-top: 1.25rem;" class="scientific-layer-box">
+              <div class="layer-item">
+                <span class="layer-tag result">3. Matching & König's Duality Results</span>
+                <div class="layer-content">
+                  <div>Max Cardinality Matching: <strong id="matching-res-size">--</strong></div>
+                  <div>König's Theorem Status: <strong id="matching-res-konig">--</strong></div>
+                  <div style="margin-top: 0.5rem; font-weight: 600;">Optimally Assigned Research Pairs:</div>
+                  <ul id="matching-res-pairs" style="margin-left: 1.25rem; font-size: 0.85rem;"></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB: CONSTRAINT ANALYSIS ==================== -->
+        <section id="tab-constraints" class="tab-section">
+          <div class="page-header">
+            <h1 class="page-title">🧠 Biological Constraint & Optimization Analysis</h1>
+            <p class="page-description">Model mutually exclusive primer pairings, conflicting probe sets, and NP-hard biomarker selection problems.</p>
+          </div>
+
+          <div class="scientific-layer-box">
+            <div class="layer-item">
+              <span class="layer-tag">1. Scientific Purpose</span>
+              <div class="layer-content">Verify if a multiplex assay schedule can avoid cross-reacting primer conflicts (3-SAT) and demonstrate Karp polynomial reductions to CLIQUE and VERTEX COVER.</div>
+            </div>
+            <div class="layer-item">
+              <span class="layer-tag method">2. Computational Method</span>
+              <div class="layer-content"><strong>DPLL 3-SAT Solver</strong> with <strong>3-SAT -> CLIQUE -> INDEPENDENT SET -> VERTEX COVER Reductions</strong> and <strong>2-Approximation for Vertex Cover</strong></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Biological Constraint 3-SAT Solver</div>
+            </div>
+            <div style="padding: 0.75rem; background-color: var(--bg-surface-subtle); border-radius: var(--radius-md); font-family: var(--font-mono); font-size: 0.85rem; margin-bottom: 1rem;">
+              Formula: (TP53 | MDM2 | ~CDKN1A) & (~TP53 | BAX | BCL2) & (~MDM2 | ~BAX | PTEN) & (CDKN1A | ~BCL2 | EGFR)
+            </div>
+            <button id="btn-run-3sat" class="btn btn-primary">Solve Constraint Model</button>
+
+            <div id="sat-results-box" style="display: none; margin-top: 1.25rem;" class="scientific-layer-box">
+              <div class="layer-item">
+                <span class="layer-tag result">3. DPLL Solver Truth Model</span>
+                <div class="layer-content">
+                  <div>Status: <strong id="sat-res-status">--</strong></div>
+                  <pre id="sat-res-model" style="font-family: var(--font-mono); font-size: 0.82rem; margin-top: 0.5rem;"></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB: GENOME ANALYTICS ==================== -->
+        <section id="tab-analytics" class="tab-section">
+          <div class="page-header">
+            <h1 class="page-title">⚡ Genome Analytics & Parallel Processing</h1>
+            <p class="page-description">Streaming instrument observation sampling, cryptogenomics, and parallel prefix aggregations.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Streaming Reservoir Sampling (Algorithm R)</div>
+              <span class="card-subtitle">Maintains uniform probability sample size k over continuous unbounded observation streams</span>
+            </div>
+            <button class="btn btn-primary" onclick="window.apiClient.runReservoirSampling(5).then(res => alert('Sampled ' + res.finalSample.length + ' observations with uniform prob ' + res.theoreticalProbability))">
+              Sample Live Sequencer Stream
+            </button>
+          </div>
+        </section>
+
+        <!-- ==================== TAB: ALGORITHM COMPARISON ==================== -->
+        <section id="tab-comparison" class="tab-section">
+          <div class="page-header">
+            <h1 class="page-title">⚖️ Algorithm Comparison Lab</h1>
+            <p class="page-description">Run multiple algorithms on identical biological inputs to evaluate empirical runtime vs theoretical complexity.</p>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Side-by-Side Algorithmic Benchmark Engine</div>
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1rem;">
+              Compare KMP, Z-Algorithm, and Rabin-Karp on identical target genomes or compare Needleman-Wunsch, Smith-Waterman, and Levenshtein distance.
+            </p>
+            <button class="btn btn-primary" onclick="switchTab('tab-motif')">Go to Motif Search Benchmark</button>
+          </div>
+        </section>
+
+        <!-- ==================== TAB: DATASETS ==================== -->
+        <section id="tab-datasets" class="tab-section">
+          <div class="page-header">
+            <h1 class="page-title">📁 Research Datasets</h1>
+            <p class="page-description">Curated educational and simulated reference genomes, variants, and facility topologies.</p>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Built-in Genomic Libraries</div>
+            </div>
+            <ul style="margin-left: 1.5rem; font-size: 0.88rem; line-height: 1.8;">
+              <li><strong>E. coli K-12 Replication Origin (oriC)</strong> – 245 bp core locus</li>
+              <li><strong>Human Beta-Globin (HBB) Wild-Type & Sickle Cell</strong> – 142 bp exon 1 alleles</li>
+              <li><strong>SARS-CoV-2 Spike Receptor-Binding Domain (RBD)</strong> – 210 bp wildcard locus</li>
+              <li><strong>Synthetic Cancer Mutation Catalog</strong> – BRCA1, TP53, CFTR, EGFR variants</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- ==================== TAB: HISTORY ==================== -->
+        <section id="tab-history" class="tab-section">
+          <div class="page-header">
+            <h1 class="page-title">📜 Analysis Session History</h1>
+            <p class="page-description">Audit trail of all executed computational operations during this active research session.</p>
+          </div>
+          <div class="card">
+            <div class="table-responsive">
+              <table class="scientific-table">
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>Computational Method</th>
+                    <th>Scientific Module</th>
+                    <th>Result Summary</th>
+                    <th>Runtime</th>
+                  </tr>
+                </thead>
+                <tbody id="history-full-tbody">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB: ABOUT ==================== -->
+        <section id="tab-about" class="tab-section">
+          <div class="page-header">
+            <h1 class="page-title">ℹ️ System Information & Academic Disclaimer</h1>
+            <p class="page-description">Platform architecture, course information, and educational scope.</p>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">About BioGenome</div>
+            </div>
+            <p style="font-size: 0.88rem; line-height: 1.8; color: var(--text-secondary);">
+              <strong>BioGenome</strong> is an integrated computational genomics platform created for <strong>Data Structures and Algorithms (DSA-3)</strong> academic viva and laboratory demonstrations. It demonstrates how classical computer science algorithms—spanning exact pattern matching, suffix indexing, dynamic programming, network flow, NP-complete reductions, and randomized streaming—directly address core computational biology challenges.
+            </p>
+            <div style="margin-top: 1rem; padding: 0.85rem; background-color: var(--amber-light); border: 1px solid var(--amber-accent); border-radius: var(--radius-md); font-size: 0.82rem; color: #78350f;">
+              <strong>⚠️ Educational Simulation Notice:</strong> BioGenome is an academic demonstration platform. Sequences, variants, and resource networks are representative educational models and do NOT constitute clinical diagnostic or medical conclusions.
+            </div>
+          </div>
+        </section>
+
+      </main>
     </div>
   </div>
-  <div class="badge">Review 1 &middot; Modules 1–3</div>
-</header>
 
-<div class="layout">
-<aside>
-  <div class="sec-label">Module 1 – String Algorithms</div>
-  <div class="nav-item active" onclick="nav(this,'kmp')"><span class="ico">🔍</span>KMP Algorithm<span class="nbadge">O(N+M)</span></div>
-  <div class="nav-item" onclick="nav(this,'z')"><span class="ico">⚡</span>Z-Algorithm<span class="nbadge">O(N+M)</span></div>
-  <div class="nav-item" onclick="nav(this,'rk')"><span class="ico">🔢</span>Rabin-Karp<span class="nbadge">Hash</span></div>
-  <div class="nav-item" onclick="nav(this,'aho')"><span class="ico">🌐</span>Aho-Corasick<span class="nbadge">Multi</span></div>
-  <div class="sec-label">Module 2 – Suffix Structures</div>
-  <div class="nav-item" onclick="nav(this,'sa')"><span class="ico">📊</span>Suffix Array (SA-IS)</div>
-  <div class="nav-item" onclick="nav(this,'lcp')"><span class="ico">📈</span>LCP Array (Kasai)</div>
-  <div class="nav-item" onclick="nav(this,'sam')"><span class="ico">🤖</span>Suffix Automaton</div>
-  <div class="nav-item" onclick="nav(this,'stree')"><span class="ico">🌲</span>Suffix Tree</div>
-  <div class="sec-label">Module 3 – Dynamic Programming</div>
-  <div class="nav-item" onclick="nav(this,'nw')"><span class="ico">🧬</span>Needleman-Wunsch</div>
-  <div class="nav-item" onclick="nav(this,'sw')"><span class="ico">🔬</span>Smith-Waterman</div>
-  <div class="nav-item" onclick="nav(this,'ed')"><span class="ico">✏️</span>Edit Distance</div>
-  <div class="nav-item" onclick="nav(this,'bm')"><span class="ico">🧩</span>Bitmask Assembly</div>
-</aside>
-
-<main>
-
-<!-- KMP -->
-<div id="p-kmp" class="page on">
-  <div class="ptitle"><h2>🔍 <span class="g1">Knuth-Morris-Pratt (KMP)</span></h2>
-  <p>Exact DNA motif search using π-table failure function to avoid redundant comparisons</p></div>
-  <div class="card">
-    <div class="ctitle"><span>⚙️</span> Parameters</div>
-    <div class="fgrid">
-      <div class="fg"><label>Dataset</label>
-        <select id="kmp-ds" onchange="dsChange('kmp')">
-          <option value="ecoli">E. coli K-12 oriC (245 bp)</option>
-          <option value="sars">SARS-CoV-2 Spike RBD</option>
-          <option value="hbb">Human HBB Wildtype</option>
-          <option value="custom">Custom…</option>
-        </select></div>
-      <div class="fg"><label>Motif / Pattern</label>
-        <input type="text" id="kmp-motif" value="AGCT" maxlength="50"/></div>
-    </div>
-    <div class="fg" id="kmp-cw" style="display:none;margin-top:10px;"><label>Custom Sequence</label>
-      <textarea id="kmp-cs" rows="3" placeholder="ACGT…"></textarea></div>
-    <div class="brow">
-      <button class="btn btn-p" onclick="runKMP()"><div class="spinner" id="kmp-sp"></div>▶ Run KMP</button>
-      <button class="btn btn-s" onclick="hide('kmp')">↺ Reset</button>
-    </div>
-  </div>
-  <div class="result" id="kmp-r">
-    <div class="srow" id="kmp-stats"></div>
-    <div class="card"><div class="ctitle"><span>📊</span> π-Table (LPS Array)</div>
-      <div class="pit-wrap" id="kmp-pit"></div></div>
-    <div class="card"><div class="ctitle"><span>🎨</span> Sequence Visualization</div>
-      <div class="seqviz" id="kmp-viz"></div>
-      <div id="kmp-cx"></div></div>
-  </div>
-</div>
-
-<!-- Z-Algorithm -->
-<div id="p-z" class="page">
-  <div class="ptitle"><h2>⚡ <span class="g1">Z-Algorithm</span></h2>
-  <p>Z-array based pattern detection; Z[i] = length of longest substring starting at i matching a prefix of the text</p></div>
-  <div class="card">
-    <div class="ctitle"><span>⚙️</span> Parameters</div>
-    <div class="fgrid">
-      <div class="fg"><label>Dataset</label>
-        <select id="z-ds" onchange="dsChange('z')">
-          <option value="ecoli">E. coli K-12 oriC</option>
-          <option value="sars">SARS-CoV-2 Spike RBD</option>
-          <option value="hbb">Human HBB Wildtype</option>
-          <option value="custom">Custom…</option>
-        </select></div>
-      <div class="fg"><label>Motif</label><input type="text" id="z-motif" value="ACCAC"/></div>
-    </div>
-    <div class="fg" id="z-cw" style="display:none;margin-top:10px;"><label>Custom Sequence</label>
-      <textarea id="z-cs" rows="3"></textarea></div>
-    <div class="brow">
-      <button class="btn btn-p" onclick="runZ()"><div class="spinner" id="z-sp"></div>▶ Run Z-Algorithm</button>
-      <button class="btn btn-s" onclick="hide('z')">↺ Reset</button>
-    </div>
-  </div>
-  <div class="result" id="z-r">
-    <div class="srow" id="z-stats"></div>
-    <div class="card"><div class="ctitle"><span>📈</span> Z-Array Bar Chart (first 60 positions)</div>
-      <div class="chart-c"><canvas id="z-chart"></canvas></div>
-      <div id="z-cx"></div></div>
-    <div class="card"><div class="ctitle"><span>🎨</span> Sequence Visualization</div>
-      <div class="seqviz" id="z-viz"></div></div>
-  </div>
-</div>
-
-<!-- Rabin-Karp -->
-<div id="p-rk" class="page">
-  <div class="ptitle"><h2>🔢 <span class="g1">Rabin-Karp Algorithm</span></h2>
-  <p>Rolling polynomial hash (radix 257, prime 1e9+7) for average O(N+M) DNA motif detection</p></div>
-  <div class="card">
-    <div class="ctitle"><span>⚙️</span> Parameters</div>
-    <div class="fgrid">
-      <div class="fg"><label>Dataset</label>
-        <select id="rk-ds" onchange="dsChange('rk')">
-          <option value="ecoli">E. coli K-12 oriC</option>
-          <option value="sars">SARS-CoV-2 Spike RBD</option>
-          <option value="hbb">Human HBB Wildtype</option>
-          <option value="custom">Custom…</option>
-        </select></div>
-      <div class="fg"><label>Motif</label><input type="text" id="rk-motif" value="AGCT"/></div>
-    </div>
-    <div class="fg" id="rk-cw" style="display:none;margin-top:10px;"><label>Custom Sequence</label>
-      <textarea id="rk-cs" rows="3"></textarea></div>
-    <div class="brow">
-      <button class="btn btn-p" onclick="runRK()"><div class="spinner" id="rk-sp"></div>▶ Run Rabin-Karp</button>
-      <button class="btn btn-s" onclick="hide('rk')">↺ Reset</button>
-    </div>
-  </div>
-  <div class="result" id="rk-r">
-    <div class="srow" id="rk-stats"></div>
-    <div class="card"><div class="ctitle"><span>🎨</span> Match Visualization</div>
-      <div class="seqviz" id="rk-viz"></div>
-      <div id="rk-cx"></div></div>
-  </div>
-</div>
-
-<!-- Aho-Corasick -->
-<div id="p-aho" class="page">
-  <div class="ptitle"><h2>🌐 <span class="g1">Aho-Corasick Multi-Motif</span></h2>
-  <p>Single-pass O(N+ΣMi+Z) detection of all restriction enzyme sites simultaneously</p></div>
-  <div class="card">
-    <div class="ctitle"><span>⚙️</span> Parameters</div>
-    <div class="fgrid c1">
-      <div class="fg"><label>Dataset</label>
-        <select id="aho-ds" onchange="dsChange('aho')">
-          <option value="ecoli">E. coli K-12 oriC (restriction enzymes)</option>
-          <option value="sars">SARS-CoV-2 Spike RBD</option>
-          <option value="hbb">Human HBB Wildtype</option>
-          <option value="custom">Custom…</option>
-        </select></div>
-    </div>
-    <div class="fg" id="aho-cw" style="display:none;margin-top:10px;"><label>Custom Sequence</label>
-      <textarea id="aho-cs" rows="3"></textarea></div>
-    <div class="alert ai" style="margin-top:12px;">ℹ️ Default patterns: EcoRI, BamHI, HindIII, NotI, AluI, HhaI, TaqI, SmaI, DnaA-Box, TATA-Box</div>
-    <div class="brow">
-      <button class="btn btn-p" onclick="runAho()"><div class="spinner" id="aho-sp"></div>▶ Run Aho-Corasick</button>
-    </div>
-  </div>
-  <div class="result" id="aho-r">
-    <div class="srow" id="aho-stats"></div>
-    <div class="card"><div class="ctitle"><span>📋</span> Match Table</div>
-      <div style="overflow-x:auto"><table class="stab"><thead><tr><th>#</th><th>Motif</th><th>Pattern</th><th>Start</th><th>End</th><th>1-based</th><th>Context</th></tr></thead>
-        <tbody id="aho-tbody"></tbody></table></div>
-      <div id="aho-cx"></div></div>
-  </div>
-</div>
-
-<!-- Suffix Array -->
-<div id="p-sa" class="page">
-  <div class="ptitle"><h2>📊 <span class="g2">Suffix Array (SA-IS)</span></h2>
-  <p>Linear-time O(N) construction with O(M log N) binary search genome indexing</p></div>
-  <div class="card">
-    <div class="ctitle"><span>⚙️</span> Parameters</div>
-    <div class="fgrid">
-      <div class="fg"><label>Dataset</label>
-        <select id="sa-ds" onchange="dsChange('sa')">
-          <option value="ecoli">E. coli K-12 oriC</option>
-          <option value="custom">Custom…</option>
-        </select></div>
-      <div class="fg"><label>Query Motif</label><input type="text" id="sa-q" value="ACCAC"/></div>
-    </div>
-    <div class="fg" id="sa-cw" style="display:none;margin-top:10px;"><label>Custom Sequence</label>
-      <textarea id="sa-cs" rows="3"></textarea></div>
-    <div class="brow">
-      <button class="btn btn-p" onclick="runSA()"><div class="spinner" id="sa-sp"></div>▶ Build &amp; Search</button>
-    </div>
-  </div>
-  <div class="result" id="sa-r">
-    <div class="srow" id="sa-stats"></div>
-    <div class="card"><div class="ctitle"><span>📑</span> Sorted Suffix Table (first 30)</div>
-      <div style="overflow-x:auto;max-height:300px"><table class="stab"><thead><tr><th>Rank</th><th>Start</th><th>Suffix (truncated)</th></tr></thead>
-        <tbody id="sa-tbody"></tbody></table></div>
-      <div id="sa-cx"></div></div>
-  </div>
-</div>
-
-<!-- LCP -->
-<div id="p-lcp" class="page">
-  <div class="ptitle"><h2>📈 <span class="g2">Kasai LCP Array</span></h2>
-  <p>O(N) Longest Common Prefix array construction using Kasai's key invariant: LCP[Rank[i]] ≥ LCP[Rank[i-1]]–1</p></div>
-  <div class="card">
-    <div class="ctitle"><span>⚙️</span> Parameters</div>
-    <div class="fgrid c1">
-      <div class="fg"><label>Dataset</label>
-        <select id="lcp-ds" onchange="dsChange('lcp')">
-          <option value="ecoli">E. coli K-12 oriC</option>
-          <option value="custom">Custom…</option>
-        </select></div>
-    </div>
-    <div class="fg" id="lcp-cw" style="display:none;margin-top:10px;"><label>Custom Sequence</label>
-      <textarea id="lcp-cs" rows="3"></textarea></div>
-    <div class="brow">
-      <button class="btn btn-p" onclick="runLCP()"><div class="spinner" id="lcp-sp"></div>▶ Build LCP Array</button>
-    </div>
-  </div>
-  <div class="result" id="lcp-r">
-    <div class="srow" id="lcp-stats"></div>
-    <div class="card"><div class="ctitle"><span>📊</span> LCP Line Chart (first 40 ranks)</div>
-      <div class="chart-c"><canvas id="lcp-chart"></canvas></div>
-      <div id="lcp-cx"></div></div>
-  </div>
-</div>
-
-<!-- Suffix Automaton -->
-<div id="p-sam" class="page">
-  <div class="ptitle"><h2>🤖 <span class="g2">Suffix Automaton (DAWG)</span></h2>
-  <p>Compact DAG with ≤2N–1 states: O(M) substring query, O(N1+N2) Longest Common Substring</p></div>
-  <div class="card">
-    <div class="ctitle"><span>⚙️</span> Parameters</div>
-    <div class="fgrid">
-      <div class="fg"><label>Sequence 1 (index)</label>
-        <textarea id="sam-s1" rows="3">AATATTACAAACTTGTGCCCTTTTGGTGAAGTT</textarea></div>
-      <div class="fg"><label>Sequence 2 (LCS with)</label>
-        <textarea id="sam-s2" rows="3">ACAGGAAGAGAATCAGCAACTGTGTTGCTGATT</textarea></div>
-    </div>
-    <div class="fg" style="margin-top:10px;"><label>Query Substring</label><input type="text" id="sam-q" value="GCATCT"/></div>
-    <div class="brow">
-      <button class="btn btn-p" onclick="runSAM()"><div class="spinner" id="sam-sp"></div>▶ Build Automaton</button>
-    </div>
-  </div>
-  <div class="result" id="sam-r">
-    <div class="srow" id="sam-stats"></div>
-    <div id="sam-detail"></div>
-  </div>
-</div>
-
-<!-- Suffix Tree -->
-<div id="p-stree" class="page">
-  <div class="ptitle"><h2>🌲 <span class="g2">Suffix Tree</span></h2>
-  <p>Compressed trie with ≤2N nodes; O(M) substring pattern search</p></div>
-  <div class="card">
-    <div class="ctitle"><span>⚙️</span> Parameters</div>
-    <div class="fgrid">
-      <div class="fg"><label>DNA Sequence</label><input type="text" id="st-seq" value="GATAGACAGATAGATA"/></div>
-      <div class="fg"><label>Query Pattern</label><input type="text" id="st-q" value="GATA"/></div>
-    </div>
-    <div class="brow">
-      <button class="btn btn-p" onclick="runST()"><div class="spinner" id="st-sp"></div>▶ Build Tree</button>
-    </div>
-  </div>
-  <div class="result" id="stree-r">
-    <div class="srow" id="stree-stats"></div>
-    <div id="stree-cx"></div>
-  </div>
-</div>
-
-<!-- Needleman-Wunsch -->
-<div id="p-nw" class="page">
-  <div class="ptitle"><h2>🧬 <span class="g3">Needleman-Wunsch Global Alignment</span></h2>
-  <p>Optimal end-to-end alignment via DP recurrence: D[i][j] = max{diagonal±score, up+gap, left+gap}</p></div>
-  <div class="card">
-    <div class="ctitle"><span>⚙️</span> Parameters</div>
-    <div class="fgrid">
-      <div class="fg"><label>Sequence 1</label><textarea id="nw-s1" rows="2">AATATTACAAACTTGTGCCC</textarea></div>
-      <div class="fg"><label>Sequence 2</label><textarea id="nw-s2" rows="2">AATATTACAAACTTGTGCCA</textarea></div>
-    </div>
-    <div class="fgrid c3" style="margin-top:10px;">
-      <div class="fg"><label>Match Score</label><input type="number" id="nw-m" value="2"/></div>
-      <div class="fg"><label>Mismatch Penalty</label><input type="number" id="nw-mm" value="-1"/></div>
-      <div class="fg"><label>Gap Penalty</label><input type="number" id="nw-g" value="-2"/></div>
-    </div>
-    <div class="brow">
-      <button class="btn btn-p" onclick="runNW()"><div class="spinner" id="nw-sp"></div>▶ Global Align</button>
-    </div>
-  </div>
-  <div class="result" id="nw-r">
-    <div class="srow" id="nw-stats"></div>
-    <div class="card"><div class="ctitle"><span>🎯</span> Alignment Result</div>
-      <div class="abox" id="nw-aln"></div></div>
-    <div class="card" id="nw-gc" style="display:none"><div class="ctitle"><span>🔢</span> DP Score Matrix</div>
-      <div class="dpwrap" id="nw-grid"></div>
-      <div id="nw-cx"></div></div>
-  </div>
-</div>
-
-<!-- Smith-Waterman -->
-<div id="p-sw" class="page">
-  <div class="ptitle"><h2>🔬 <span class="g3">Smith-Waterman Local Alignment</span></h2>
-  <p>Highest-scoring local conserved region via H[i][j] = max{0, diagonal, up+gap, left+gap}</p></div>
-  <div class="card">
-    <div class="ctitle"><span>⚙️</span> Parameters</div>
-    <div class="fgrid">
-      <div class="fg"><label>Sequence 1</label><textarea id="sw-s1" rows="2">AATATTACAAACTTGTGCCCTTTTGGTGAA</textarea></div>
-      <div class="fg"><label>Sequence 2</label><textarea id="sw-s2" rows="2">CAGGAAGAGAATCAGCAACTGTGTTGCTGA</textarea></div>
-    </div>
-    <div class="fgrid c3" style="margin-top:10px;">
-      <div class="fg"><label>Match Score</label><input type="number" id="sw-m" value="3"/></div>
-      <div class="fg"><label>Mismatch Penalty</label><input type="number" id="sw-mm" value="-2"/></div>
-      <div class="fg"><label>Gap Penalty</label><input type="number" id="sw-g" value="-2"/></div>
-    </div>
-    <div class="brow">
-      <button class="btn btn-p" onclick="runSW()"><div class="spinner" id="sw-sp"></div>▶ Local Align</button>
-    </div>
-  </div>
-  <div class="result" id="sw-r">
-    <div class="srow" id="sw-stats"></div>
-    <div class="card"><div class="ctitle"><span>🎯</span> Local Alignment Result</div>
-      <div class="abox" id="sw-aln"></div></div>
-    <div class="card" id="sw-gc" style="display:none"><div class="ctitle"><span>🔢</span> DP Score Matrix</div>
-      <div class="dpwrap" id="sw-grid"></div>
-      <div id="sw-cx"></div></div>
-  </div>
-</div>
-
-<!-- Edit Distance -->
-<div id="p-ed" class="page">
-  <div class="ptitle"><h2>✏️ <span class="g3">Damerau-Levenshtein Edit Distance</span></h2>
-  <p>Quantifies sequence divergence: Insertion, Deletion, Substitution, Transposition mutations</p></div>
-  <div class="card">
-    <div class="ctitle"><span>⚙️</span> Parameters</div>
-    <div class="fgrid">
-      <div class="fg"><label>Query Sequence</label><input type="text" id="ed-s1" value="ACGTACGT"/></div>
-      <div class="fg"><label>Target Sequence</label><input type="text" id="ed-s2" value="ACGTAGGT"/></div>
-    </div>
-    <div class="brow">
-      <button class="btn btn-p" onclick="runED()"><div class="spinner" id="ed-sp"></div>▶ Compute Distance</button>
-    </div>
-  </div>
-  <div class="result" id="ed-r">
-    <div class="srow" id="ed-stats"></div>
-    <div class="card"><div class="ctitle"><span>🎯</span> Edit Trail &amp; Alignment</div>
-      <div class="abox" id="ed-aln"></div>
-      <div id="ed-cx"></div></div>
-  </div>
-</div>
-
-<!-- Bitmask Assembly -->
-<div id="p-bm" class="page">
-  <div class="ptitle"><h2>🧩 <span class="g3">Bitmask DP Fragment Assembly</span></h2>
-  <p>Shortest Common Superstring via TSP-formulated Bitmask DP: O(K² · 2^K) for K ≤ 20 reads</p></div>
-  <div class="card">
-    <div class="ctitle"><span>⚙️</span> Parameters</div>
-    <div class="fg"><label>DNA Fragments (one per line, max 20)</label>
-      <textarea id="bm-frags" rows="7" style="font-family:'JetBrains Mono',monospace">ATGCGATAC
-CGATACGAT
-TACGATGCC
-TGCCGGTTA
-GGTTAGCTA
-AGCTATGCG
-GATGCCGGT</textarea></div>
-    <div class="brow">
-      <button class="btn btn-p" onclick="runBM()"><div class="spinner" id="bm-sp"></div>▶ Assemble Genome</button>
-      <button class="btn btn-s" onclick="document.getElementById('bm-frags').value='ATCGGA\nGAATCG\nTCGGAA\nAATCGG'">Simple Demo</button>
-    </div>
-  </div>
-  <div class="result" id="bm-r">
-    <div class="srow" id="bm-stats"></div>
-    <div class="card"><div class="ctitle"><span>🧬</span> Assembled Superstring</div>
-      <div class="seqviz" id="bm-asm"></div>
-      <div id="bm-cx"></div></div>
-    <div class="card"><div class="ctitle"><span>🔄</span> Assembly Order</div>
-      <div id="bm-ord" style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--txt2);padding:8px;"></div>
-    </div>
-  </div>
-</div>
-
-</main>
-</div>
-
-<script>
-const API='http://localhost:8080/api/v1';
-const DS={ecoli:'',sars:'',hbb:''};
-
-(async()=>{
-  try{
-    const r=await fetch(API+'/search/datasets');
-    const d=await r.json();
-    DS.ecoli=d.ecoli_oric?.sequence||'';
-    DS.sars=d.sars_cov2_spike?.sequence||'';
-    DS.hbb=d.hbb_wildtype?.sequence||'';
-  }catch{
-    DS.ecoli='AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGCTTCTGAACTGGTTACCTGCCGTGAGTAAATTAAAATTTTATTGACTTAGGTCACTAAATACTTTAACCAATATAGGCATAGCGCACAGACAGATAAAAATTACAGAGTACACAACATCCATGAAACGCATTAGCACCACCATTACCACCACCATCACCATTACCACAGGTAACGGTGCGGGCTGACGCGTACAGGAAACACAGAAAAAAG';
-    DS.sars='AATATTACAAACTTGTGCCCTTTTGGTGAAGTTTTTAACGCCACCAGATTTGCATCTGTTTATGCTTGGAACAGGAAGAGAATCAGCAACTGTGTTGCTGATTATTCTGTCCTATATAATTCCGCATCATTTTCCACTTT';
-    DS.hbb='ATGGTGCATCTGACTCCTGAGGAGAAGTCTGCCGTTACTGCCCTGTGGGGCAAGGTGAACGTGGATGAAGTTGGTGGTGAGGCCCTGGGCAGGCTGCTGGTGGTCTACCCTTGGACCCAGAGGTTCTTTGAGTCCTTTGGG';
-  }
-})();
-
-function nav(el,id){
-  document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
-  el.classList.add('active');
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
-  document.getElementById('p-'+id).classList.add('on');
-}
-function dsChange(a){
-  const v=document.getElementById(a+'-ds').value;
-  const cw=document.getElementById(a+'-cw');
-  if(cw)cw.style.display=v==='custom'?'block':'none';
-}
-function getSeq(a){
-  const s=document.getElementById(a+'-ds');
-  if(!s)return'';
-  const v=s.value;
-  if(v==='custom')return document.getElementById(a+'-cs')?.value||'';
-  return DS[v]||'';
-}
-function hide(a){
-  const r=document.getElementById(a+'-r');
-  if(r)r.classList.remove('on');
-}
-function spin(id,on){
-  const s=document.getElementById(id+'-sp');
-  if(s)s.style.display=on?'block':'none';
-}
-function stats(items){
-  return items.map(({v,l,c})=>`<div class="sc"><div class="sv ${c||'cb'}">${v}</div><div class="sl">${l}</div></div>`).join('');
-}
-function seqViz(segs){
-  if(!segs||!segs.length)return'';
-  return segs.map(s=>s.type==='match'?`<span class="match">${s.text}</span>`:`<span class="norm">${s.text}</span>`).join('');
-}
-function cxtag(t){return`<div class="cxtag">⏱ ${t}</div>`;}
-function aln(d){
-  const a1=d.alignedSeq1||d.localSeq1||'';
-  const a2=d.alignedSeq2||d.localSeq2||'';
-  const mid=d.midLine||'';
-  return`<div class="arow"><span class="albl">Seq1</span><span class="aseq">${a1}</span></div>
-<div class="arow"><span class="albl">    </span><span class="amid">${mid}</span></div>
-<div class="arow"><span class="albl">Seq2</span><span class="aseq">${a2}</span></div>`;
-}
-function dpGrid(g,s1,s2){
-  if(!g||!g.length)return'';
-  let mx=-Infinity;
-  g.forEach(r=>r.forEach(c=>{if(c>mx)mx=c;}));
-  let h=`<table class="dpt"><thead><tr><th></th><th>-</th>`;
-  for(let c=0;c<g[0].length-1;c++)h+=`<th>${(s2||'')[c]||''}</th>`;
-  h+=`</tr></thead><tbody>`;
-  g.forEach((row,r)=>{
-    h+=`<tr><th>${r===0?'-':((s1||'')[r-1]||'')}</th>`;
-    row.forEach(v=>{
-      const cl=v===mx?'dpm':v>0?'dppos':v<0?'dpneg':'';
-      h+=`<td class="${cl}">${v}</td>`;
-    });
-    h+=`</tr>`;
-  });
-  return h+`</tbody></table>`;
-}
-
-async function post(url,body){
-  const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-  return r.json();
-}
-
-// KMP
-async function runKMP(){
-  const seq=getSeq('kmp');
-  const motif=document.getElementById('kmp-motif').value.trim().toUpperCase().replace(/[^ACGTN]/g,'');
-  if(!seq||!motif)return alert('Provide sequence and motif');
-  spin('kmp',true);
-  try{
-    const j=await post(API+'/search/kmp',{sequence:seq,motif});
-    if(!j.success)throw new Error(j.message);
-    const d=j.data;
-    document.getElementById('kmp-stats').innerHTML=stats([
-      {v:d.sequenceLength,l:'Seq Length',c:'cb'},
-      {v:d.motifLength,l:'Motif Length',c:'cc'},
-      {v:d.matchCount,l:'Matches Found',c:'cg'},
-      {v:j.executionTimeMs+' ms',l:'Exec Time',c:'cy'},
-    ]);
-    const pi=d.piTable||[];
-    let piH=`<table class="pit"><thead><tr>`;
-    motif.split('').forEach(c=>piH+=`<th>${c}</th>`);
-    piH+=`</tr><tr>`;
-    pi.forEach(v=>piH+=`<td>${v}</td>`);
-    document.getElementById('kmp-pit').innerHTML=piH+`</tr></table>`;
-    document.getElementById('kmp-viz').innerHTML=seqViz(d.highlighted);
-    document.getElementById('kmp-cx').innerHTML=cxtag(d.complexity);
-    document.getElementById('kmp-r').classList.add('on');
-  }catch(e){alert('Error: '+e.message);}
-  spin('kmp',false);
-}
-
-// Z-Algorithm
-let zCh=null;
-async function runZ(){
-  const seq=getSeq('z');
-  const motif=document.getElementById('z-motif').value.trim().toUpperCase().replace(/[^ACGTN]/g,'');
-  if(!seq||!motif)return alert('Provide sequence and motif');
-  spin('z',true);
-  try{
-    const j=await post(API+'/search/z-algorithm',{sequence:seq,motif});
-    if(!j.success)throw new Error(j.message);
-    const d=j.data;
-    document.getElementById('z-stats').innerHTML=stats([
-      {v:d.sequenceLength,l:'Seq Length',c:'cb'},
-      {v:d.matchCount,l:'Matches',c:'cg'},
-      {v:j.executionTimeMs+' ms',l:'Time',c:'cy'},
-    ]);
-    const za=d.zArrayPreview||[];
-    if(zCh)zCh.destroy();
-    zCh=new Chart(document.getElementById('z-chart'),{type:'bar',data:{
-      labels:za.map((_,i)=>i),
-      datasets:[{label:'Z-Value',data:za,backgroundColor:'rgba(99,179,237,.5)',borderColor:'#63b3ed',borderWidth:1,borderRadius:3}]
-    },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-      scales:{x:{ticks:{color:'#8899bb',font:{size:10}},grid:{color:'rgba(255,255,255,.04)'}},
-              y:{ticks:{color:'#8899bb'},grid:{color:'rgba(255,255,255,.04)'}}}}});
-    document.getElementById('z-viz').innerHTML=seqViz(d.highlighted);
-    document.getElementById('z-cx').innerHTML=cxtag(d.complexity);
-    document.getElementById('z-r').classList.add('on');
-  }catch(e){alert('Error: '+e.message);}
-  spin('z',false);
-}
-
-// Rabin-Karp
-async function runRK(){
-  const seq=getSeq('rk');
-  const motif=document.getElementById('rk-motif').value.trim().toUpperCase().replace(/[^ACGTN]/g,'');
-  if(!seq||!motif)return alert('Provide sequence and motif');
-  spin('rk',true);
-  try{
-    const j=await post(API+'/search/rabin-karp',{sequence:seq,motif});
-    if(!j.success)throw new Error(j.message);
-    const d=j.data;
-    document.getElementById('rk-stats').innerHTML=stats([
-      {v:d.sequenceLength,l:'Seq Length',c:'cb'},
-      {v:d.matchCount,l:'Matches',c:'cg'},
-      {v:d.spuriousHits,l:'Spurious Hits',c:'cy'},
-      {v:d.hashComparisons,l:'Hash Checks',c:'cp'},
-    ]);
-    document.getElementById('rk-viz').innerHTML=seqViz(d.highlighted);
-    document.getElementById('rk-cx').innerHTML=cxtag(d.complexity);
-    document.getElementById('rk-r').classList.add('on');
-  }catch(e){alert('Error: '+e.message);}
-  spin('rk',false);
-}
-
-// Aho-Corasick
-async function runAho(){
-  const seq=getSeq('aho');
-  spin('aho',true);
-  try{
-    const j=await post(API+'/search/aho-corasick',{sequence:seq,motifs:[]});
-    if(!j.success)throw new Error(j.message);
-    const d=j.data;
-    document.getElementById('aho-stats').innerHTML=stats([
-      {v:d.sequenceLength,l:'Seq Length',c:'cb'},
-      {v:d.totalMatches,l:'Total Matches',c:'cg'},
-      {v:j.executionTimeMs+' ms',l:'Time',c:'cy'},
-    ]);
-    document.getElementById('aho-tbody').innerHTML=(d.matches||[]).map((m,i)=>
-      `<tr><td>${i+1}</td><td>${m.name}</td><td><code style="color:var(--cyan)">${m.pattern}</code></td>
-       <td>${m.startIndex}</td><td>${m.endIndex}</td><td>${m.oneBasedIndex}</td>
-       <td style="font-family:'JetBrains Mono',monospace;font-size:11px">${m.context}</td></tr>`).join('');
-    document.getElementById('aho-cx').innerHTML=cxtag(d.complexity);
-    document.getElementById('aho-r').classList.add('on');
-  }catch(e){alert('Error: '+e.message);}
-  spin('aho',false);
-}
-
-// Suffix Array
-async function runSA(){
-  const seq=getSeq('sa');
-  const q=document.getElementById('sa-q').value.trim().toUpperCase().replace(/[^ACGTN]/g,'');
-  spin('sa',true);
-  try{
-    const j=await post(API+'/suffix/array',{sequence:seq,query:q});
-    if(!j.success)throw new Error(j.message);
-    const d=j.data;
-    document.getElementById('sa-stats').innerHTML=stats([
-      {v:d.sequenceLength,l:'Seq Length',c:'cb'},
-      {v:d.queryMatchCount,l:'Query Matches',c:'cg'},
-      {v:j.executionTimeMs+' ms',l:'Build Time',c:'cy'},
-    ]);
-    const ms=new Set(d.queryMatches||[]);
-    document.getElementById('sa-tbody').innerHTML=(d.suffixTable||[]).map(r=>
-      `<tr class="${ms.has(r.suffixStart)?'mr':''}"><td>${r.rank}</td><td>${r.suffixStart}</td><td>${r.suffix}</td></tr>`).join('');
-    document.getElementById('sa-cx').innerHTML=cxtag(d.buildComplexity+' build · '+d.queryComplexity+' query');
-    document.getElementById('sa-r').classList.add('on');
-  }catch(e){alert('Error: '+e.message);}
-  spin('sa',false);
-}
-
-// LCP
-let lcpCh=null;
-async function runLCP(){
-  const seq=getSeq('lcp');
-  spin('lcp',true);
-  try{
-    const j=await post(API+'/suffix/lcp',{sequence:seq});
-    if(!j.success)throw new Error(j.message);
-    const d=j.data;
-    document.getElementById('lcp-stats').innerHTML=stats([
-      {v:d.sequenceLength,l:'Seq Length',c:'cb'},
-      {v:d.maxLcpValue,l:'Max LCP',c:'cg'},
-      {v:d.longestRepeatedSubstrings?.length||0,l:'Repeat Patterns',c:'cp'},
-    ]);
-    const ld=d.lcpHistogramData||[];
-    if(lcpCh)lcpCh.destroy();
-    lcpCh=new Chart(document.getElementById('lcp-chart'),{type:'line',data:{
-      labels:ld.map(r=>r.rank),
-      datasets:[{label:'LCP',data:ld.map(r=>r.lcpValue),borderColor:'#4fd1c5',
-        backgroundColor:'rgba(79,209,197,.1)',fill:true,tension:.4,pointRadius:2}]
-    },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-      scales:{x:{ticks:{color:'#8899bb',font:{size:10}},grid:{color:'rgba(255,255,255,.04)'}},
-              y:{ticks:{color:'#8899bb'},grid:{color:'rgba(255,255,255,.04)'}}}}});
-    document.getElementById('lcp-cx').innerHTML=cxtag(d.complexity);
-    document.getElementById('lcp-r').classList.add('on');
-  }catch(e){alert('Error: '+e.message);}
-  spin('lcp',false);
-}
-
-// Suffix Automaton
-async function runSAM(){
-  const s1=document.getElementById('sam-s1').value.trim().toUpperCase().replace(/[^ACGTN]/g,'');
-  const s2=document.getElementById('sam-s2').value.trim().toUpperCase().replace(/[^ACGTN]/g,'');
-  const q=document.getElementById('sam-q').value.trim().toUpperCase().replace(/[^ACGTN]/g,'');
-  spin('sam',true);
-  try{
-    const j=await post(API+'/suffix/automaton',{sequence1:s1,sequence2:s2,query:q});
-    if(!j.success)throw new Error(j.message);
-    const d=j.data;
-    document.getElementById('sam-stats').innerHTML=stats([
-      {v:d.stateCount,l:'States Built',c:'cb'},
-      {v:d.distinctSubstrings,l:'Distinct Substrings',c:'cc'},
-      {v:d.queryOccurrences,l:'Query Occurrences',c:'cg'},
-      {v:d.queryFound?'✓ Yes':'✗ No',l:'Query Found',c:d.queryFound?'cg':'ck'},
-      {v:d.lcsLength,l:'LCS Length',c:'cp'},
-    ]);
-    document.getElementById('sam-detail').innerHTML=`
-      <div class="card"><div class="ctitle"><span>🧮</span> Results</div>
-      <p style="color:var(--txt2);font-size:13px;margin-bottom:10px;">
-        <strong style="color:var(--txt)">Longest Common Substring:</strong>
-        <code style="color:var(--cyan)">${d.longestCommonSubstring||'(none)'}</code>
-      </p>
-      ${cxtag(d.buildComplexity+' build')}
-      ${cxtag(d.queryComplexity+' query')}
-      ${cxtag(d.lcsComplexity+' LCS')}
-      </div>`;
-    document.getElementById('sam-r').classList.add('on');
-  }catch(e){alert('Error: '+e.message);}
-  spin('sam',false);
-}
-
-// Suffix Tree
-async function runST(){
-  const seq=document.getElementById('st-seq').value.trim().toUpperCase().replace(/[^ACGTN]/g,'');
-  const q=document.getElementById('st-q').value.trim().toUpperCase().replace(/[^ACGTN]/g,'');
-  spin('st',true);
-  try{
-    const j=await post(API+'/suffix/tree',{sequence:seq,query:q});
-    if(!j.success)throw new Error(j.message);
-    const d=j.data;
-    document.getElementById('stree-stats').innerHTML=stats([
-      {v:d.sequenceLength,l:'Seq Length',c:'cb'},
-      {v:d.totalNodes,l:'Tree Nodes',c:'cc'},
-      {v:d.queryFound?'✓ Found':'✗ Not Found',l:'Query',c:d.queryFound?'cg':'ck'},
-    ]);
-    document.getElementById('stree-cx').innerHTML=cxtag(d.complexity);
-    document.getElementById('stree-r').classList.add('on');
-  }catch(e){alert('Error: '+e.message);}
-  spin('st',false);
-}
-
-// Needleman-Wunsch
-async function runNW(){
-  const s1=document.getElementById('nw-s1').value.trim().toUpperCase().replace(/[^ACGTN-]/g,'');
-  const s2=document.getElementById('nw-s2').value.trim().toUpperCase().replace(/[^ACGTN-]/g,'');
-  if(!s1||!s2)return alert('Provide both sequences');
-  spin('nw',true);
-  try{
-    const j=await post(API+'/align/needleman-wunsch',{sequence1:s1,sequence2:s2,
-      matchScore:+document.getElementById('nw-m').value,
-      mismatchPenalty:+document.getElementById('nw-mm').value,
-      gapPenalty:+document.getElementById('nw-g').value});
-    if(!j.success)throw new Error(j.message);
-    const d=j.data;
-    document.getElementById('nw-stats').innerHTML=stats([
-      {v:d.score,l:'Alignment Score',c:'cb'},
-      {v:d.matches,l:'Matches',c:'cg'},
-      {v:d.mismatches,l:'Mismatches',c:'cy'},
-      {v:d.gaps,l:'Gaps',c:'ck'},
-      {v:d.identity,l:'Identity',c:'cc'},
-    ]);
-    document.getElementById('nw-aln').innerHTML=aln(d);
-    if(d.dpGrid){
-      document.getElementById('nw-grid').innerHTML=dpGrid(d.dpGrid,s1,s2);
-      document.getElementById('nw-gc').style.display='block';
-    }
-    document.getElementById('nw-cx').innerHTML=cxtag(d.complexity);
-    document.getElementById('nw-r').classList.add('on');
-  }catch(e){alert('Error: '+e.message);}
-  spin('nw',false);
-}
-
-// Smith-Waterman
-async function runSW(){
-  const s1=document.getElementById('sw-s1').value.trim().toUpperCase().replace(/[^ACGTN-]/g,'');
-  const s2=document.getElementById('sw-s2').value.trim().toUpperCase().replace(/[^ACGTN-]/g,'');
-  if(!s1||!s2)return alert('Provide both sequences');
-  spin('sw',true);
-  try{
-    const j=await post(API+'/align/smith-waterman',{sequence1:s1,sequence2:s2,
-      matchScore:+document.getElementById('sw-m').value,
-      mismatchPenalty:+document.getElementById('sw-mm').value,
-      gapPenalty:+document.getElementById('sw-g').value});
-    if(!j.success)throw new Error(j.message);
-    const d=j.data;
-    document.getElementById('sw-stats').innerHTML=stats([
-      {v:d.score,l:'Local Score',c:'cb'},
-      {v:d.matches,l:'Matches',c:'cg'},
-      {v:d.mismatches,l:'Mismatches',c:'cy'},
-      {v:d.gaps,l:'Gaps',c:'ck'},
-      {v:d.identity,l:'Identity',c:'cc'},
-    ]);
-    document.getElementById('sw-aln').innerHTML=aln(d);
-    if(d.dpGrid){
-      document.getElementById('sw-grid').innerHTML=dpGrid(d.dpGrid,s1,s2);
-      document.getElementById('sw-gc').style.display='block';
-    }
-    document.getElementById('sw-cx').innerHTML=cxtag(d.complexity);
-    document.getElementById('sw-r').classList.add('on');
-  }catch(e){alert('Error: '+e.message);}
-  spin('sw',false);
-}
-
-// Edit Distance
-async function runED(){
-  const s1=document.getElementById('ed-s1').value.trim().toUpperCase().replace(/[^ACGTN]/g,'');
-  const s2=document.getElementById('ed-s2').value.trim().toUpperCase().replace(/[^ACGTN]/g,'');
-  if(!s1||!s2)return alert('Provide both sequences');
-  spin('ed',true);
-  try{
-    const j=await post(API+'/align/edit-distance',{sequence1:s1,sequence2:s2});
-    if(!j.success)throw new Error(j.message);
-    const d=j.data;
-    document.getElementById('ed-stats').innerHTML=stats([
-      {v:d.editDistance,l:'Edit Distance',c:'cb'},
-      {v:d.similarity,l:'Similarity',c:'cg'},
-      {v:j.executionTimeMs+' ms',l:'Time',c:'cy'},
-    ]);
-    document.getElementById('ed-aln').innerHTML=
-      `<div class="arow"><span class="albl">Query </span><span class="aseq">${d.alignedSeq1}</span></div>
-       <div class="arow"><span class="albl">Target</span><span class="aseq">${d.alignedSeq2}</span></div>
-       <div style="margin-top:10px;color:var(--txt2);font-size:12px;">
-         CIGAR: <code style="color:var(--cyan)">${d.cigar}</code>
-       </div>
-       <div style="margin-top:6px;color:var(--txt2);font-size:12px;">
-         Ops: <code style="color:var(--purple)">${(d.operations||[]).join(' → ')}</code>
-       </div>`;
-    document.getElementById('ed-cx').innerHTML=cxtag(d.complexity);
-    document.getElementById('ed-r').classList.add('on');
-  }catch(e){alert('Error: '+e.message);}
-  spin('ed',false);
-}
-
-// Bitmask Assembly
-async function runBM(){
-  const raw=document.getElementById('bm-frags').value.trim();
-  const frags=raw.split('\n').map(f=>f.trim().toUpperCase().replace(/[^ACGTN]/g,'')).filter(f=>f.length>0);
-  if(!frags.length)return alert('Enter fragments');
-  if(frags.length>20)return alert('Max 20 fragments');
-  spin('bm',true);
-  try{
-    const j=await post(API+'/align/bitmask-assembly',{fragments:frags});
-    if(!j.success)throw new Error(j.message);
-    const d=j.data;
-    document.getElementById('bm-stats').innerHTML=stats([
-      {v:d.fragmentCount,l:'Fragments',c:'cb'},
-      {v:d.assembledLength,l:'Assembled Length',c:'cg'},
-      {v:d.overlapSaved,l:'Overlap Saved',c:'cc'},
-      {v:j.executionTimeMs+' ms',l:'Time',c:'cy'},
-    ]);
-    document.getElementById('bm-asm').textContent=d.assembledGenome;
-    document.getElementById('bm-ord').innerHTML=(d.assemblyOrder||[]).map((f,i)=>
-      `<span style="color:var(--blue)">${i>0?' → ':''}</span><span style="color:var(--green)">${f}</span>`).join('');
-    document.getElementById('bm-cx').innerHTML=cxtag(d.complexity);
-    document.getElementById('bm-r').classList.add('on');
-  }catch(e){alert('Error: '+e.message);}
-  spin('bm',false);
-}
-</script>
+  <script src="js/api.js"></script>
+  <script src="js/visualizers.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>

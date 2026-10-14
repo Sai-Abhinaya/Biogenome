@@ -172,6 +172,24 @@ public class SuffixStructureController {
         }
     }
 
+    // ===== 2.5 Repeated Pattern Explorer =====
+    @PostMapping("/repeats")
+    public ResponseEntity<ApiResponse> exploreRepeatedPatterns(@RequestBody Map<String, Object> body) {
+        try {
+            String sequence = sanitize((String) body.getOrDefault("sequence", GenomicDataGenerator.ECOLI_ORIC_DNA.substring(0, 100)));
+            int minLen = body.containsKey("minRepeatLength") ? Integer.parseInt(body.get("minRepeatLength").toString()) : 3;
+
+            long start = System.currentTimeMillis();
+            com.biogenome.suffix.RepeatedPatternExplorer.RepeatExplorerResult res =
+                    com.biogenome.suffix.RepeatedPatternExplorer.exploreRepeats(sequence, minLen);
+            long elapsed = System.currentTimeMillis() - start;
+
+            return ResponseEntity.ok(ApiResponse.ok("Repeated Pattern Explorer", elapsed, res));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error("Repeat Explorer", e.getMessage()));
+        }
+    }
+
     private String sanitize(String seq) {
         if (seq == null) return "";
         return seq.toUpperCase().replaceAll("[^ACGTN$]", "").trim();

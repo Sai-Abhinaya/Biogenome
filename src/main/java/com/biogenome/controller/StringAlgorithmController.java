@@ -168,6 +168,24 @@ public class StringAlgorithmController {
         return ResponseEntity.ok(datasets);
     }
 
+    // ===== 1.5 Algorithm Comparison (KMP vs Z vs Rabin-Karp) =====
+    @PostMapping("/compare")
+    public ResponseEntity<ApiResponse> compareAlgorithms(@RequestBody Map<String, String> body) {
+        try {
+            String sequence = sanitize(body.getOrDefault("sequence", GenomicDataGenerator.ECOLI_ORIC_DNA));
+            String motif = sanitize(body.getOrDefault("motif", "AGCT"));
+
+            long start = System.currentTimeMillis();
+            com.biogenome.string.StringAlgorithmComparator.ComparisonResult res =
+                    com.biogenome.string.StringAlgorithmComparator.compareAll(sequence, motif);
+            long elapsed = System.currentTimeMillis() - start;
+
+            return ResponseEntity.ok(ApiResponse.ok("Motif Search Algorithm Comparison", elapsed, res));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error("Comparison Failure", e.getMessage()));
+        }
+    }
+
     // ===== Helpers =====
     private String sanitize(String seq) {
         if (seq == null) return "";

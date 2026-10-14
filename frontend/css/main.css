@@ -1,0 +1,1393 @@
+/* ==========================================================================
+   BioGenome – Modern Bioinformatics & Computational Algorithms Platform
+   Visual Design System: Warm Ivory, Forest Green, Muted Sage & Deep Teal
+   ========================================================================== */
+
+:root {
+  /* Warm White & Soft Ivory Backgrounds */
+  --bg-app: #FAF9F5;
+  --bg-surface: #FFFFFF;
+  --bg-subtle: #F3F4EE;
+  --bg-subtle-hover: #E9ECE5;
+  --bg-muted: #E6E9E2;
+  --bg-card: #FFFFFF;
+
+  /* Dark Charcoal & Botanical Typography */
+  --text-main: #1C2420;
+  --text-body: #2F3934;
+  --text-muted: #56645D;
+  --text-light: #7E8D85;
+  --text-inverse: #FFFFFF;
+
+  /* Subtle Borders & Dividers */
+  --border-subtle: #E3E8E3;
+  --border-medium: #D0D8D1;
+  --border-strong: #B5C1B7;
+  --border-focus: #2A5A43;
+
+  /* Core Accent Palette: Forest Green, Muted Sage & Deep Teal */
+  --forest-green: #1E3F30;
+  --forest-green-hover: #163024;
+  --forest-green-light: #EBF2ED;
+  --forest-green-border: #C8DACE;
+
+  --sage-accent: #4D735F;
+  --sage-hover: #3E5E4D;
+  --sage-light: #F0F5F2;
+  --sage-border: #D1DFD7;
+
+  --teal-accent: #235F5B;
+  --teal-hover: #1A4946;
+  --teal-light: #EEF6F5;
+  --teal-border: #C8E0DE;
+
+  --amber-accent: #9A6422;
+  --amber-light: #FDF6ED;
+  --amber-border: #F3DEBE;
+
+  --rose-accent: #9E383B;
+  --rose-light: #FDF1F2;
+  --rose-border: #F7C8CC;
+
+  /* Restrained DNA nucleotide color palette */
+  --dna-a-bg: #EAF4EE;
+  --dna-a-text: #195E36;
+  --dna-a-border: #C2DFCC;
+
+  --dna-t-bg: #FBEBEB;
+  --dna-t-text: #962929;
+  --dna-t-border: #F3C3C3;
+
+  --dna-g-bg: #FBF4E7;
+  --dna-g-text: #8C5815;
+  --dna-g-border: #F5DEB2;
+
+  --dna-c-bg: #EAF3F7;
+  --dna-c-text: #1E5572;
+  --dna-c-border: #C5DFEC;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+
+  /* Restrained Shadows */
+  --shadow-xs: 0 1px 2px rgba(28, 36, 32, 0.04);
+  --shadow-sm: 0 2px 4px rgba(28, 36, 32, 0.05);
+  --shadow-md: 0 4px 12px -2px rgba(28, 36, 32, 0.06), 0 2px 4px rgba(28, 36, 32, 0.03);
+  --shadow-lg: 0 12px 24px -4px rgba(28, 36, 32, 0.07), 0 4px 8px rgba(28, 36, 32, 0.03);
+
+  /* Corner Radii */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 9999px;
+
+  /* Header & Container Dimensions */
+  --header-height: 64px;
+  --container-max: 1220px;
+}
+
+/* Restrained Scientific Dark Mode (Deep Forest Night) */
+[data-theme="dark"] {
+  --bg-app: #121815;
+  --bg-surface: #18221D;
+  --bg-subtle: #202D26;
+  --bg-subtle-hover: #283931;
+  --bg-muted: #2E4138;
+  --bg-card: #18221D;
+
+  --text-main: #F4F6F4;
+  --text-body: #DCE3DF;
+  --text-muted: #B6C3BC;
+  --text-light: #899B91;
+  --text-inverse: #121815;
+
+  --border-subtle: #283730;
+  --border-medium: #364A40;
+  --border-strong: #4B6356;
+  --border-focus: #528A6F;
+
+  --forest-green: #376850;
+  --forest-green-hover: #437D61;
+  --forest-green-light: #1D2D24;
+  --forest-green-border: #335442;
+
+  --sage-accent: #6C9781;
+  --sage-hover: #7EA993;
+  --sage-light: #1F3027;
+  --sage-border: #354E41;
+
+  --teal-accent: #3A837E;
+  --teal-hover: #489D97;
+  --teal-light: #1D2F2E;
+  --teal-border: #2D4D4B;
+
+  --amber-accent: #D4943E;
+  --amber-light: #322515;
+  --amber-border: #523D24;
+
+  --rose-accent: #E06C71;
+  --rose-light: #331A1C;
+  --rose-border: #5A272A;
+
+  --dna-a-bg: #1B3526;
+  --dna-a-text: #A8E0BE;
+  --dna-a-border: #29543B;
+
+  --dna-t-bg: #3B1F21;
+  --dna-t-text: #F2A8AC;
+  --dna-t-border: #5E2B2E;
+
+  --dna-g-bg: #382A15;
+  --dna-g-text: #F0CF8E;
+  --dna-g-border: #5E4620;
+
+  --dna-c-bg: #182C38;
+  --dna-c-text: #96CCE8;
+  --dna-c-border: #25485E;
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.45);
+}
+
+/* ==========================================================================
+   Base & Reset
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Code and monospaced text */
+code, pre, .mono {
+  font-family: var(--font-mono);
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ==========================================================================
+   Navigation Header
+   ========================================================================== */
+
+.app-header {
+  position: sticky;
+  top: 0;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  z-index: 100;
+  height: var(--header-height);
+  backdrop-filter: blur(8px);
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--text-main);
+}
+
+.brand-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  background-color: var(--forest-green-light);
+  border: 1px solid var(--forest-green-border);
+  color: var(--forest-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+.brand-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--forest-green);
+  line-height: 1.15;
+}
+
+.brand-tagline {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.nav-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.nav-item:hover {
+  color: var(--text-main);
+  background-color: var(--bg-subtle);
+}
+
+.nav-item.active {
+  color: var(--forest-green);
+  background-color: var(--forest-green-light);
+  font-weight: 600;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.theme-toggle {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 1rem;
+  transition: all 0.15s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--bg-subtle-hover);
+  color: var(--text-main);
+  border-color: var(--border-medium);
+}
+
+/* Mobile Nav Toggle */
+.mobile-nav-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  color: var(--text-main);
+}
+
+/* ==========================================================================
+   Main Content Layout
+   ========================================================================== */
+
+.app-main {
+  flex: 1;
+  padding: 2rem 0 3.5rem;
+}
+
+.tab-section {
+  display: none;
+}
+
+.tab-section.active {
+  display: block;
+  animation: fadeIn 0.25s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   1. Home Page Styles
+   ========================================================================== */
+
+.hero-section {
+  text-align: center;
+  padding: 3rem 1.5rem 2.5rem;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-pill);
+  background-color: var(--forest-green-light);
+  border: 1px solid var(--forest-green-border);
+  color: var(--forest-green);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin-bottom: 1.25rem;
+}
+
+.hero-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--text-main);
+  line-height: 1.25;
+  margin-bottom: 0.85rem;
+}
+
+.hero-tagline {
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--forest-green);
+  margin-bottom: 1rem;
+}
+
+.hero-desc {
+  font-size: 0.98rem;
+  color: var(--text-muted);
+  max-width: 680px;
+  margin: 0 auto 1.85rem;
+  line-height: 1.65;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Section Header Rows */
+.section-header {
+  margin-bottom: 1.5rem;
+}
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--forest-green);
+  margin-bottom: 0.35rem;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--text-main);
+}
+
+.section-subtitle {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+  max-width: 760px;
+}
+
+/* Biological Tasks Grid */
+.tasks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.task-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.35rem;
+  box-shadow: var(--shadow-xs);
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  position: relative;
+}
+
+.task-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--forest-green-border);
+  box-shadow: var(--shadow-md);
+}
+
+.task-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+}
+
+.task-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  color: var(--forest-green);
+}
+
+.task-dsa-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--forest-green-light);
+  color: var(--forest-green);
+  border: 1px solid var(--forest-green-border);
+}
+
+.task-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 0.45rem;
+  line-height: 1.35;
+}
+
+.task-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 1.15rem;
+  flex-grow: 1;
+}
+
+.task-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 0.85rem;
+  margin-top: auto;
+}
+
+.task-complexity {
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--text-light);
+}
+
+.task-link {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--forest-green);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.task-card:hover .task-link {
+  color: var(--sage-accent);
+}
+
+/* Callout Strip (Philosophy Box) */
+.philosophy-banner {
+  background: var(--forest-green-light);
+  border: 1px solid var(--forest-green-border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem 1.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.philosophy-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.philosophy-text h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--forest-green);
+  margin-bottom: 0.35rem;
+}
+
+.philosophy-text p {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+/* ==========================================================================
+   2. Algorithm Explorer (The Primary Interactive Area)
+   ========================================================================== */
+
+.explorer-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Category Filter Chips Bar */
+.category-chips-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.category-chip {
+  padding: 0.45rem 0.95rem;
+  border-radius: var(--radius-pill);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.category-chip:hover {
+  border-color: var(--border-medium);
+  color: var(--text-main);
+  background-color: var(--bg-subtle);
+}
+
+.category-chip.active {
+  background: var(--forest-green);
+  color: var(--text-inverse);
+  border-color: var(--forest-green);
+  font-weight: 600;
+}
+
+/* Task Selector Bar (Step 1) */
+.workflow-step-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-xs);
+}
+
+.step-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--forest-green);
+  background-color: var(--forest-green-light);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.85rem;
+}
+
+/* Algorithm Card Information Hierarchy (Requirement #4) */
+.algo-meta-panel {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-xs);
+}
+
+.algo-primary-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.algo-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.badge-biological {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--forest-green);
+  background: var(--forest-green-light);
+  border: 1px solid var(--forest-green-border);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-sm);
+}
+
+.badge-dsa {
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: var(--teal-accent);
+  background: var(--teal-light);
+  border: 1px solid var(--teal-border);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-sm);
+}
+
+.algo-display-title {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.3;
+  margin-bottom: 0.45rem;
+}
+
+.algo-dsa-subtitle {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--forest-green);
+  margin-bottom: 1rem;
+}
+
+.algo-purpose-box {
+  background: var(--bg-subtle);
+  border-left: 3px solid var(--forest-green);
+  padding: 0.85rem 1rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--text-body);
+  margin-bottom: 1.25rem;
+}
+
+.algo-io-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.io-item {
+  background: var(--bg-subtle);
+  padding: 0.75rem 0.85rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.io-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-light);
+  margin-bottom: 0.25rem;
+}
+
+.io-content {
+  font-size: 0.85rem;
+  color: var(--text-main);
+  line-height: 1.45;
+}
+
+/* Right side complexity & educational checklist */
+.algo-secondary-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.complexity-card {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+}
+
+.complexity-header {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-light);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.complexity-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.complexity-row:last-child {
+  border-bottom: none;
+}
+
+.complexity-name {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.complexity-val {
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--forest-green);
+}
+
+.complexity-note {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  margin-top: 0.65rem;
+  line-height: 1.4;
+}
+
+/* Numbered How It Works List */
+.how-it-works-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+}
+
+.how-it-works-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-light);
+  margin-bottom: 0.65rem;
+}
+
+.steps-list {
+  list-style: none;
+  counter-reset: algo-step-counter;
+}
+
+.steps-list li {
+  counter-increment: algo-step-counter;
+  position: relative;
+  padding-left: 1.65rem;
+  margin-bottom: 0.6rem;
+  font-size: 0.82rem;
+  color: var(--text-body);
+  line-height: 1.45;
+}
+
+.steps-list li::before {
+  content: counter(algo-step-counter);
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--forest-green-light);
+  color: var(--forest-green);
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Adaptive Input Panel (Step 3) */
+.adaptive-input-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-xs);
+}
+
+.input-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.preset-selector-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.preset-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form-label-hint {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--text-light);
+}
+
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--bg-subtle);
+  color: var(--text-main);
+  font-size: 0.9rem;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.form-input.mono, .form-textarea.mono {
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  background: var(--bg-surface);
+  box-shadow: 0 0 0 2px var(--forest-green-light);
+}
+
+.form-row-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.validation-error-text {
+  font-size: 0.82rem;
+  color: var(--rose-accent);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.validation-error-text:empty {
+  display: none;
+}
+
+/* Clean Dedicated Results Section (Step 5, Requirement #8) */
+.results-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.results-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.results-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-sm);
+  background: var(--forest-green-light);
+  color: var(--forest-green);
+}
+
+.results-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.results-metrics-strip {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.metric-pill {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.metric-pill strong {
+  color: var(--text-main);
+  font-family: var(--font-mono);
+}
+
+/* Results Content Summary */
+.results-summary-box {
+  background: var(--bg-subtle);
+  border-radius: var(--radius-sm);
+  padding: 1.15rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border-subtle);
+}
+
+.summary-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.88rem;
+}
+
+.summary-row:last-child {
+  margin-bottom: 0;
+}
+
+.summary-label {
+  font-weight: 600;
+  color: var(--text-muted);
+  min-width: 140px;
+}
+
+.summary-value {
+  color: var(--text-main);
+}
+
+.match-indices-list {
+  display: inline-flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.index-badge {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-xs);
+  background-color: var(--forest-green-light);
+  color: var(--forest-green);
+  border: 1px solid var(--forest-green-border);
+}
+
+/* Visual Canvas Area */
+.visual-canvas-card {
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 1.5rem;
+}
+
+.visual-canvas-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.visual-canvas-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Step-by-Step Interactive Player Controls */
+.player-controls-strip {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.controls-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.btn-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.speed-control {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.progress-track {
+  width: 100%;
+  height: 4px;
+  background: var(--border-subtle);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--forest-green);
+  width: 0%;
+  transition: width 0.15s ease;
+}
+
+.status-step-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.step-explanation-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  margin-top: 0.5rem;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--text-body);
+}
+
+.step-explanation-box strong {
+  color: var(--forest-green);
+}
+
+.step-math-pill {
+  margin-top: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  background: var(--forest-green-light);
+  color: var(--forest-green);
+  padding: 0.35rem 0.65rem;
+  border-radius: var(--radius-xs);
+  display: inline-block;
+}
+
+/* Expandable Details Container */
+.expandable-details {
+  margin-top: 1.5rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  overflow: hidden;
+}
+
+.expandable-summary {
+  padding: 0.85rem 1.15rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+  background: var(--bg-subtle);
+}
+
+.expandable-summary:hover {
+  color: var(--text-main);
+}
+
+.expandable-content {
+  padding: 1.25rem;
+  font-size: 0.88rem;
+  color: var(--text-body);
+  line-height: 1.6;
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* ==========================================================================
+   Buttons & Action Controls
+   ========================================================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.6rem 1.15rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: inherit;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  line-height: 1.25;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background-color: var(--forest-green);
+  color: var(--text-inverse);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--forest-green-hover);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary {
+  background-color: var(--sage-accent);
+  color: var(--text-inverse);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--sage-hover);
+}
+
+.btn-outline {
+  background-color: transparent;
+  border-color: var(--border-medium);
+  color: var(--text-main);
+}
+
+.btn-outline:hover:not(:disabled) {
+  background-color: var(--bg-subtle);
+  border-color: var(--forest-green-border);
+  color: var(--forest-green);
+}
+
+.btn-subtle {
+  background-color: var(--bg-subtle);
+  border-color: var(--border-subtle);
+  color: var(--text-muted);
+}
+
+.btn-subtle:hover:not(:disabled) {
+  background-color: var(--bg-subtle-hover);
+  color: var(--text-main);
+}
+
+.btn-sm {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.8rem;
+}
+
+.btn-lg {
+  padding: 0.8rem 1.65rem;
+  font-size: 0.98rem;
+}
+
+/* ==========================================================================
+   Tables & Data Presentation
+   ========================================================================== */
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  text-align: left;
+}
+
+.data-table th {
+  padding: 0.65rem 0.85rem;
+  background-color: var(--bg-subtle);
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.data-table td {
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-body);
+}
+
+.data-table tbody tr:hover {
+  background-color: var(--bg-subtle);
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.app-footer {
+  border-top: 1px solid var(--border-subtle);
+  background-color: var(--bg-surface);
+  padding: 2rem 0;
+  margin-top: auto;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+
+@media (max-width: 900px) {
+  .algo-meta-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-title {
+    font-size: 1.85rem;
+  }
+
+  .tasks-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .header-nav {
+    display: none;
+  }
+
+  .mobile-nav-toggle {
+    display: block;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
+
+  .algo-io-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-row {
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .summary-label {
+    min-width: auto;
+  }
+}

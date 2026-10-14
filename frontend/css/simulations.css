@@ -1,0 +1,610 @@
+/* ==========================================================================
+   BioGenome – Simulation Controls & Interactive Visualizers
+   Botanical Aesthetic: Forest Green, Muted Sage, Warm Ivory & Deep Teal
+   ========================================================================== */
+
+/* Control Panel */
+.sim-controls-panel {
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1.15rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.sim-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.controls-button-group {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.speed-control-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.sim-progress-track {
+  width: 100%;
+  height: 5px;
+  background-color: var(--border-subtle);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  position: relative;
+}
+
+.sim-progress-fill {
+  height: 100%;
+  background-color: var(--forest-green);
+  width: 0%;
+  transition: width 0.15s ease;
+}
+
+.sim-meta-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--text-light);
+  font-family: var(--font-mono);
+}
+
+/* Dedicated Explanation Panel */
+.explanation-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-left: 4px solid var(--forest-green);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
+  box-shadow: var(--shadow-xs);
+}
+
+.explanation-header {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--forest-green);
+  margin-bottom: 0.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.explanation-body {
+  font-size: 0.88rem;
+  color: var(--text-main);
+  line-height: 1.55;
+}
+
+.explanation-math {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  background-color: var(--forest-green-light);
+  color: var(--forest-green);
+  padding: 0.35rem 0.65rem;
+  border-radius: var(--radius-sm);
+  margin-top: 0.5rem;
+  display: inline-block;
+  border: 1px solid var(--forest-green-border);
+}
+
+/* Visualizer Stage Container */
+.visualizer-stage {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow-x: auto;
+  box-shadow: var(--shadow-xs);
+}
+
+/* DNA Nucleotide Cells */
+.dna-sequence-track {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0.5rem 0;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.nucleotide-cell {
+  width: 32px;
+  height: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-subtle);
+  color: var(--text-main);
+  position: relative;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.nucleotide-cell.base-A { background-color: var(--dna-a-bg); color: var(--dna-a-text); border-color: var(--dna-a-border); }
+.nucleotide-cell.base-T { background-color: var(--dna-t-bg); color: var(--dna-t-text); border-color: var(--dna-t-border); }
+.nucleotide-cell.base-G { background-color: var(--dna-g-bg); color: var(--dna-g-text); border-color: var(--dna-g-border); }
+.nucleotide-cell.base-C { background-color: var(--dna-c-bg); color: var(--dna-c-text); border-color: var(--dna-c-border); }
+
+.nucleotide-cell.state-comparing {
+  border: 2px solid var(--forest-green);
+  box-shadow: 0 0 0 2px var(--forest-green-light);
+  transform: translateY(-2px);
+}
+
+.nucleotide-cell.state-matched {
+  background-color: var(--dna-a-bg) !important;
+  color: var(--dna-a-text) !important;
+  border-color: var(--forest-green) !important;
+}
+
+.nucleotide-cell.state-mismatch {
+  background-color: var(--rose-light) !important;
+  color: var(--rose-accent) !important;
+  border-color: var(--rose-border) !important;
+}
+
+.nucleotide-cell .cell-index {
+  font-size: 0.58rem;
+  color: var(--text-light);
+  font-weight: 500;
+  line-height: 1;
+  margin-top: 1px;
+}
+
+/* Sliding Window Pattern Track */
+.pattern-track-wrapper {
+  position: relative;
+  display: flex;
+  margin-top: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+/* Rabin-Karp Hash Comparison Cards */
+.hash-comparison-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 1rem;
+  margin-top: 1rem;
+  background-color: var(--bg-subtle);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  width: 100%;
+}
+
+.hash-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 1rem;
+  text-align: center;
+  min-width: 140px;
+}
+
+.hash-label { font-size: 0.72rem; color: var(--text-light); text-transform: uppercase; font-weight: 600; }
+.hash-value { font-family: var(--font-mono); font-size: 1.2rem; font-weight: 700; color: var(--forest-green); margin-top: 0.2rem; }
+
+/* 2D Dynamic Programming Grid */
+.dp-matrix-container {
+  overflow: auto;
+  max-width: 100%;
+  max-height: 380px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  margin-top: 0.5rem;
+}
+
+table.dp-grid {
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  text-align: center;
+  margin: 0 auto;
+}
+
+table.dp-grid th, table.dp-grid td {
+  width: 42px;
+  height: 36px;
+  border: 1px solid var(--border-subtle);
+  padding: 0.2rem;
+  position: relative;
+}
+
+table.dp-grid th {
+  background-color: var(--bg-subtle);
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+table.dp-grid td.cell-filled {
+  background-color: var(--bg-subtle);
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+table.dp-grid td.cell-active {
+  background-color: var(--forest-green-light) !important;
+  color: var(--forest-green) !important;
+  border: 2px solid var(--forest-green) !important;
+}
+
+table.dp-grid td.cell-traceback {
+  background-color: var(--dna-a-bg) !important;
+  color: var(--dna-a-text) !important;
+  font-weight: 700;
+}
+
+/* Graph Canvas Container */
+.graph-canvas-container {
+  width: 100%;
+  height: 320px;
+  position: relative;
+}
+
+.graph-canvas-container svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Bitmask Selection Matrix */
+.bitmask-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 500px;
+}
+
+.bitmask-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg-subtle);
+  padding: 0.65rem 0.95rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.bit-tag {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  background-color: var(--border-subtle);
+}
+
+.bit-tag.active {
+  background-color: var(--forest-green);
+  color: #fff;
+  font-weight: 700;
+}
+
+/* Parallel Reduction Tree */
+.tree-level-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+  width: 100%;
+}
+
+.tree-node-box {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.84rem;
+  text-align: center;
+  min-width: 60px;
+  box-shadow: var(--shadow-xs);
+}
+
+.tree-node-box.active {
+  border-color: var(--forest-green);
+  background-color: var(--forest-green-light);
+  color: var(--forest-green);
+  font-weight: 700;
+}
+
+/* Complexity Summary Card */
+.complexity-summary-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1.15rem;
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
+  font-size: 0.82rem;
+}
+
+.complexity-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.complexity-item .label {
+  font-size: 0.72rem;
+  color: var(--text-light);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.complexity-item .val {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text-main);
+  margin-top: 0.15rem;
+}
+
+/* ==========================================================================
+   Visualizer Component Styling (Renderers.js Integration)
+   ========================================================================== */
+
+.sim-visual-box {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-xs);
+  margin-bottom: 1.25rem;
+}
+
+.track-label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
+}
+
+.nucleotide-track {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  overflow-x: auto;
+  padding: 0.5rem 0.2rem;
+  max-width: 100%;
+}
+
+.track-cell-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  user-select: none;
+}
+
+.track-cell-wrapper.spacer {
+  visibility: hidden;
+}
+
+.cell-idx {
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  color: var(--text-light);
+}
+
+.cell-val {
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  color: var(--forest-green);
+  font-weight: 600;
+}
+
+.nuc-cell {
+  width: 32px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.92rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-subtle);
+  transition: all 0.15s ease;
+}
+
+.nuc-cell.nuc-a { background-color: var(--dna-a-bg); color: var(--dna-a-text); border-color: var(--dna-a-border); }
+.nuc-cell.nuc-t { background-color: var(--dna-t-bg); color: var(--dna-t-text); border-color: var(--dna-t-border); }
+.nuc-cell.nuc-g { background-color: var(--dna-g-bg); color: var(--dna-g-text); border-color: var(--dna-g-border); }
+.nuc-cell.nuc-c { background-color: var(--dna-c-bg); color: var(--dna-c-text); border-color: var(--dna-c-border); }
+.nuc-cell.nuc-other { background-color: var(--bg-subtle); color: var(--text-muted); }
+.nuc-cell.nuc-empty { background-color: transparent; border-color: transparent; }
+
+.nuc-cell.is-current {
+  border: 2px solid var(--forest-green) !important;
+  box-shadow: 0 0 0 2px var(--forest-green-light);
+  transform: translateY(-2px);
+}
+
+.nuc-cell.is-match {
+  background-color: var(--dna-a-bg) !important;
+  color: var(--dna-a-text) !important;
+  border: 2px solid var(--forest-green) !important;
+}
+
+.nuc-cell.is-mismatch {
+  background-color: var(--rose-light) !important;
+  color: var(--rose-accent) !important;
+  border: 2px solid var(--rose-border) !important;
+}
+
+.nuc-cell.is-matched {
+  background-color: var(--forest-green-light) !important;
+  border-color: var(--forest-green-border) !important;
+  color: var(--forest-green) !important;
+}
+
+.nuc-cell.in-zbox {
+  border-top: 3px solid var(--teal-accent);
+  border-bottom: 3px solid var(--teal-accent);
+}
+
+.nuc-cell.in-window {
+  box-shadow: 0 2px 4px rgba(30, 63, 48, 0.1);
+  border-color: var(--forest-green);
+}
+
+/* Stats Pill Rows */
+.stats-pills-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.stat-pill {
+  font-size: 0.78rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-main);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.stat-pill strong {
+  font-family: var(--font-mono);
+  color: var(--forest-green);
+}
+
+/* DP Grid Matrix */
+.dp-table-scroll {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+}
+
+.dp-matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.dp-matrix-table th, .dp-matrix-table td {
+  border: 1px solid var(--border-subtle);
+  padding: 0.45rem 0.65rem;
+  min-width: 36px;
+}
+
+.dp-matrix-table th {
+  background-color: var(--bg-subtle);
+  color: var(--text-muted);
+}
+
+.dp-cell-filled {
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+}
+
+.dp-cell-current {
+  background-color: var(--forest-green-light) !important;
+  color: var(--forest-green) !important;
+  border: 2px solid var(--forest-green) !important;
+  font-weight: 700;
+}
+
+.dp-cell-trace {
+  background-color: var(--dna-a-bg) !important;
+  color: var(--dna-a-text) !important;
+  font-weight: 700;
+}
+
+/* Aho-Corasick Automaton Grid */
+.automaton-node-card {
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.78rem;
+  transition: all 0.15s ease;
+}
+
+.automaton-node-card.active-state {
+  border-color: var(--forest-green);
+  background-color: var(--forest-green-light);
+  box-shadow: 0 0 0 2px var(--forest-green-border);
+}
+
+.automaton-node-card.accepting-state {
+  border-left: 3px solid var(--teal-accent);
+}
+
+.node-id { font-weight: 700; color: var(--forest-green); }
+.node-char { margin: 0.15rem 0; color: var(--text-main); }
+.node-fail { color: var(--text-light); font-family: var(--font-mono); font-size: 0.72rem; }
+.node-output { color: var(--teal-accent); font-weight: 600; margin-top: 0.2rem; }
+
+/* Flow Edge Item */
+.flow-edge-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.85rem;
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  margin-bottom: 0.4rem;
+}
+
+.flow-edge-item.active-edge {
+  border-color: var(--forest-green);
+  background-color: var(--forest-green-light);
+}
+
+.flow-edge-item.saturated-edge {
+  border-left: 3px solid var(--amber-accent);
+}
+
+.edge-nodes { font-family: var(--font-mono); font-weight: 600; }
+.edge-capacity strong { color: var(--forest-green); }
+
+/* Table Highlight Rows */
+.highlight-row { background-color: var(--forest-green-light) !important; font-weight: 600; }
+.active-row { background-color: var(--teal-light) !important; }
+.match-row { background-color: var(--dna-a-bg) !important; color: var(--dna-a-text); font-weight: 700; }
+.neighbor-row { background-color: var(--bg-subtle) !important; }
+.highlight-cell { background-color: var(--forest-green-light); font-weight: 700; color: var(--forest-green); }
